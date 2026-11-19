@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Estudio web FEP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0b0f1a; --ink-2:#3a4256; --muted:#6b7385; --line:#e4e7ee; --bg:#f6f7fa; --card:#fff;
+  --red:#e30613; --red-soft:#fde8e9; --amber:#b86e00; --amber-soft:#fff3dc; --green:#0e8a4f; --green-soft:#e2f6ec;
+  --lime:#d4f000; --navy:#0d1b3d;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,system-ui,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6;font-size:16px}
+h1,h2,h3{font-family:"Barlow Condensed",sans-serif;line-height:1.05;letter-spacing:.2px}
+a{color:var(--red)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+/* Cover */
+.cover{background:var(--navy);color:#fff;position:relative;overflow:hidden;padding:72px 0 64px}
+.cover:before{content:"";position:absolute;right:-120px;top:-120px;width:460px;height:460px;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#eaff4d,var(--lime) 45%,#9db300 100%);opacity:.95}
+.cover:after{content:"";position:absolute;right:-60px;top:-60px;width:340px;height:340px;border-radius:50%;
+  border:6px solid rgba(255,255,255,.75);border-left-color:transparent;border-bottom-color:transparent;transform:rotate(20deg)}
+.eyebrow{font-size:13px;letter-spacing:2.5px;text-transform:uppercase;font-weight:600;color:var(--lime)}
+.cover h1{font-size:clamp(44px,7vw,84px);font-weight:800;text-transform:uppercase;margin:14px 0 18px;max-width:760px;position:relative;z-index:1}
+.cover p{max-width:620px;color:#c9d0e3;font-size:18px;position:relative;z-index:1}
+.meta{display:flex;gap:28px;flex-wrap:wrap;margin-top:32px;font-size:14px;color:#9fa9c4;position:relative;z-index:1}
+.meta b{display:block;color:#fff;font-weight:600}
+
+/* Score */
+.score{margin-top:-36px;position:relative;z-index:2}
+.score-card{background:var(--card);border-radius:20px;box-shadow:0 20px 50px -20px rgba(13,27,61,.35);padding:28px;display:grid;grid-template-columns:200px 1fr;gap:32px;align-items:center}
+.gauge{text-align:center}
+.gauge .n{font-family:"Barlow Condensed";font-size:88px;font-weight:800;color:var(--red);line-height:1}
+.gauge .n small{font-size:30px;color:var(--muted)}
+.gauge .l{font-size:13px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);font-weight:600}
+.bars{display:grid;grid-template-columns:repeat(2,1fr);gap:14px 28px}
+.bar{font-size:14px}
+.bar .top{display:flex;justify-content:space-between;font-weight:600;margin-bottom:6px}
+.bar .track{height:8px;border-radius:8px;background:#eef0f5;overflow:hidden}
+.bar .fill{height:100%;border-radius:8px}
+.lo{background:var(--red)} .mid{background:#f29b00} .hi{background:var(--green)}
+
+section{padding:64px 0 8px}
+.sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:24px}
+.sec-head .num{font-family:"Barlow Condensed";font-size:56px;font-weight:800;color:var(--red);line-height:1}
+.sec-head h2{font-size:40px;text-transform:uppercase;font-weight:800}
+.lead{font-size:18px;color:var(--ink-2);max-width:780px;margin-bottom:24px}
+
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px}
+.card h3{font-size:24px;text-transform:uppercase;margin-bottom:8px}
+.card p,.card li{color:var(--ink-2);font-size:15px}
+.card ul{padding-left:18px}
+.card li{margin:4px 0}
+.kpi{font-family:"Barlow Condensed";font-size:48px;font-weight:800;line-height:1}
+.kpi-l{font-size:13px;color:var(--muted);font-weight:500}
+
+.findings{display:grid;gap:12px}
+.f{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:grid;grid-template-columns:96px 1fr;gap:16px;align-items:start}
+.tag{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;padding:5px 8px;border-radius:6px;text-align:center}
+.t-crit{background:var(--red);color:#fff}
+.t-high{background:var(--red-soft);color:var(--red)}
+.t-med{background:var(--amber-soft);color:var(--amber)}
+.t-ok{background:var(--green-soft);color:var(--green)}
+.f h4{font-size:16px;margin-bottom:2px}
+.f p{font-size:14.5px;color:var(--ink-2)}
+code{font-family:ui-monospace,Consolas,monospace;font-size:.88em;background:#eef0f5;padding:1px 6px;border-radius:5px}
+
+table{width:100%;border-collapse:collapse;background:var(--card);border-radius:14px;overflow:hidden;border:1px solid var(--line);font-size:14.5px}
+th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--navy);color:#fff;font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.8px}
+tr:last-child td{border-bottom:0}
+.tbl-wrap{overflow-x:auto;border-radius:14px}
+
+.ia{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.ia .col{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.ia .col h5{background:var(--ink);color:#fff;font-family:"Barlow Condensed";font-size:18px;text-transform:uppercase;padding:10px 12px;letter-spacing:.5px}
+.ia .col:nth-child(odd) h5{background:var(--red)}
+.ia ul{list-style:none;padding:10px 12px;font-size:13px;color:var(--ink-2)}
+.ia li{padding:3px 0;border-bottom:1px dashed var(--line)}
+.ia li:last-child{border:0}
+
+.swatches{display:flex;gap:10px;flex-wrap:wrap}
+.sw{width:130px;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:var(--card);font-size:12px}
+.sw div{height:70px}
+.sw span{display:block;padding:8px 10px}
+.sw b{display:block;font-size:13px}
+
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.phase{background:var(--card);border-radius:16px;border:1px solid var(--line);padding:20px;position:relative}
+.phase .w{font-size:12px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:1px}
+.phase h3{font-size:24px;text-transform:uppercase;margin:6px 0 10px}
+.phase ul{padding-left:18px;font-size:14px;color:var(--ink-2)}
+
+.cta{background:var(--ink);color:#fff;border-radius:24px;padding:40px;margin:64px 0;display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}
+.cta h2{font-size:40px;text-transform:uppercase}
+.cta p{color:#aab3c8}
+.btn{display:inline-block;background:var(--lime);color:var(--ink);font-weight:700;text-decoration:none;padding:16px 26px;border-radius:999px;font-size:16px}
+.btn:hover{background:#e8ff3a}
+footer{padding:24px 0 48px;color:var(--muted);font-size:13px}
+
+@media (max-width:860px){
+  .score-card{grid-template-columns:1fr}
+  .bars,.grid2,.grid3,.timeline{grid-template-columns:1fr}
+  .ia{grid-template-columns:repeat(2,1fr)}
+  .f{grid-template-columns:1fr;gap:8px}
+  .tag{justify-self:start}
+  .cover:before{width:260px;height:260px;right:-100px;top:-100px}
+  .cover:after{display:none}
+}
+@media print{.cover{-webkit-print-color-adjust:exact;print-color-adjust:exact}.cta{display:none}}
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <div class="wrap">
+    <div class="eyebrow">Auditoría y propuesta · Noviembre 2026</div>
+    <h1>Estudio integral de padelfederacion.es</h1>
+    <p>Análisis completo del sitio web oficial de la Federación Española de Pádel: diseño, experiencia de usuario, móvil, rendimiento, SEO, accesibilidad, tecnología, seguridad y legal. Incluye propuesta de rediseño y hoja de ruta.</p>
+    <div class="meta">
+      <div><b>URL analizada</b>www.padelfederacion.es</div>
+      <div><b>Fecha</b>5 de noviembre de 2026</div>
+      <div><b>Páginas revisadas</b>Inicio, Rankings, Calendario FEP, menús completos</div>
+      <div><b>Dispositivos</b>Escritorio y móvil (375 px)</div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap score">
+  <div class="score-card">
+    <div class="gauge">
+      <div class="n">38<small>/100</small></div>
+      <div class="l">Valoración global</div>
+    </div>
+    <div class="bars">
+      <div class="bar"><div class="top"><span>Diseño visual</span><span>35</span></div><div class="track"><div class="fill lo" style="width:35%"></div></div></div>
+      <div class="bar"><div class="top"><span>Experiencia de usuario</span><span>40</span></div><div class="track"><div class="fill lo" style="width:40%"></div></div></div>
+      <div class="bar"><div class="top"><span>Móvil</span><span>50</span></div><div class="track"><div class="fill mid" style="width:50%"></div></div></div>
+      <div class="bar"><div class="top"><span>Rendimiento</span><span>30</span></div><div class="track"><div class="fill lo" style="width:30%"></div></div></div>
+      <div class="bar"><div class="top"><span>SEO técnico</span><span>25</span></div><div class="track"><div class="fill lo" style="width:25%"></div></div></div>
+      <div class="bar"><div class="top"><span>Accesibilidad</span><span>30</span></div><div class="track"><div class="fill lo" style="width:30%"></div></div></div>
+      <div class="bar"><div class="top"><span>Tecnología y seguridad</span><span>20</span></div><div class="track"><div class="fill lo" style="width:20%"></div></div></div>
+      <div class="bar"><div class="top"><span>Contenido y servicios</span><span>70</span></div><div class="track"><div class="fill hi" style="width:70%"></div></div></div>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+
+<section>
+  <div class="sec-head"><span class="num">01</span><h2>Resumen ejecutivo</h2></div>
+  <p class="lead">La web de la FEP tiene <strong>mucho contenido valioso y bien actualizado</strong> (noticias del Mundial de Qatar, calendario 2026–2027, inscripciones, formación, licencias), pero lo presenta con una <strong>plataforma técnica de hace más de diez años</strong> y un diseño que no está a la altura de la federación del país con más practicantes y mejores selecciones del mundo.</p>
+  <div class="grid3">
+    <div class="card"><div class="kpi" style="color:var(--red)">8,3 MB</div><div class="kpi-l">transferidos al cargar la portada (76 peticiones). Lo recomendable es menos de 1,5 MB.</div></div>
+    <div class="card"><div class="kpi" style="color:var(--red)">4,7 s</div><div class="kpi-l">hasta el evento de carga completa con buena conexión. En 4G móvil será bastante más.</div></div>
+    <div class="card"><div class="kpi" style="color:var(--red)">35 / 53</div><div class="kpi-l">imágenes de la portada sin texto alternativo (accesibilidad y SEO).</div></div>
+  </div>
+  <div class="grid2" style="margin-top:18px">
+    <div class="card">
+      <h3>Lo que funciona</h3>
+      <ul>
+        <li>Contenido actual y frecuente: noticias diarias, eventos con fechas y sede.</li>
+        <li>Servicios útiles: licencias, buscador, certificados, inscripciones a cursos, rankings, calendario histórico desde 2015.</li>
+        <li>Funciona bajo HTTPS y tiene una maquetación adaptable básica.</li>
+        <li>Patrocinadores de primer nivel (Iberdrola, Cupra, Head, Joma, Bullpadel…).</li>
+        <li>Secciones con valor social: Mujer y Pádel, Pádel Adaptado, Circuito de Menores.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Lo que hay que resolver</h3>
+      <ul>
+        <li>Servidor y tecnologías sin soporte (IIS 8.5, ASP clásico, jQuery 1.10.2 de 2013).</li>
+        <li>No hay cumplimiento de cookies pese a usar Google Analytics.</li>
+        <li>Portada sin jerarquía: todo pesa lo mismo y el usuario no encuentra rápido lo que busca.</li>
+        <li>Información clave dentro de imágenes (carteles, botones de ranking) que ni Google ni los lectores de pantalla pueden leer.</li>
+        <li>Fallos visibles: textos superpuestos en el carrusel, caracteres rotos, «© 2015», icono de Google+.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="num">02</span><h2>Diseño y experiencia</h2></div>
+  <p class="lead">El diseño parte de una plantilla genérica de revista (tipografía Roboto Slab, barras grises, cabecera negra) que no transmite deporte, energía ni la marca FEP.</p>
+  <div class="findings">
+    <div class="f"><span class="tag t-crit">Crítico</span><div><h4>Carrusel de noticias roto en escritorio</h4><p>En la cabecera de la portada los titulares de las noticias y de los eventos aparecen superpuestos unos encima de otros, ilegibles, junto a los banners. Es lo primero que ve el visitante.</p></div></div>
+    <div class="f"><span class="tag t-high">Alto</span><div><h4>Sin jerarquía visual</h4><p>Noticias, eventos, banners publicitarios y accesos a servicios compiten con el mismo peso. Los banners comerciales (Cupra, Premier Padel, SAE) ocupan más espacio que la información federativa.</p></div></div>
+    <div class="f"><span class="tag t-high">Alto</span><div><h4>Servicios clave escondidos</h4><p>Las tareas más frecuentes del federado (consultar licencia, ranking, inscribirse, pedir certificado) están en submenús o en banners de la barra lateral que se confunden con publicidad.</p></div></div>
+    <div class="f"><span class="tag t-high">Alto</span><div><h4>Texto dentro de imágenes</h4><p>Los carteles de eventos (hasta 1,2 MB cada uno), los accesos de la barra lateral y los botones de Rankings son imágenes con texto incrustado. No se pueden leer en móvil, traducir, buscar ni indexar.</p></div></div>
+    <div class="f"><span class="tag t-med">Medio</span><div><h4>Menú con 9 apartados y más de 45 enlaces</h4><p>Hay duplicados («Multimedia» aparece en Hemeroteca y en Mujer y Pádel), etiquetas internas («Fed. Territoriales», «Registro Árbitros/Categorías») y 4 calendarios distintos que el usuario debe distinguir.</p></div></div>
+    <div class="f"><span class="tag t-med">Medio</span><div><h4>Detalles de descuido</h4><p>«© 2015» en el pie, icono de Google+ (cerrado en 2019), caracteres rotos «INTERÏ¿½S» y «POLÏ¿½TICA», títulos en mayúsculas sostenidas, fondo con textura de pista anticuado.</p></div></div>
+    <div class="f"><span class="tag t-med">Medio</span><div><h4>Títulos de página incorrectos</h4><p>La página de Rankings tiene como título «Archivos Multimedia | FEP». Afecta a pestañas, favoritos y resultados de Google.</p></div></div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="num">03</span><h2>Móvil</h2></div>
+  <div class="grid2">
+    <div class="card">
+      <h3>Situación</h3>
+      <ul>
+        <li>La maquetación se apila en una columna, pero la portada es una lista interminable (más de 6.000 px en escritorio, mucho más en móvil).</li>
+        <li>En escritorio a 800 px de ancho la página desborda (1.009 px): aparece scroll horizontal.</li>
+        <li>El meta viewport bloquea el zoom (<code>maximum-scale=1</code>): incumple WCAG 1.4.4.</li>
+        <li>Carteles verticales de 1 MB en móvil: lentos y con letra diminuta.</li>
+        <li>Las tablas del calendario no están pensadas para pantallas pequeñas.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Por qué importa</h3>
+      <p>En webs deportivas más del 70&nbsp;% del tráfico suele venir del móvil, y en torneos el uso es casi exclusivamente móvil: jugadores y familias consultan horarios, cuadros y sedes desde el club. La web debe diseñarse <strong>primero para el móvil</strong>, con accesos de un toque a licencia, calendario e inscripciones.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="num">04</span><h2>Rendimiento</h2></div>
+  <div class="tbl-wrap"><table>
+    <tr><th>Indicador</th><th>Medido</th><th>Objetivo</th><th>Causa principal</th></tr>
+    <tr><td>Peso total de la portada</td><td><strong>8,3 MB</strong></td><td>&lt; 1,5 MB</td><td>Carteles PNG/JPG sin optimizar: 1,2 MB, 1,1 MB, 1,1 MB, 568 KB, 556 KB…</td></tr>
+    <tr><td>Peticiones</td><td><strong>76</strong></td><td>&lt; 40</td><td>9 hojas de estilo y 10 scripts separados, 50+ imágenes sin carga diferida.</td></tr>
+    <tr><td>Carga completa</td><td><strong>4,7 s</strong></td><td>&lt; 2,5 s (LCP)</td><td>Sin formatos modernos (WebP/AVIF), sin <code>loading="lazy"</code>, sin CDN.</td></tr>
+    <tr><td>Caché</td><td><code>Cache-Control: private</code></td><td>Caché pública + CDN</td><td>Cada visita vuelve a pedir todo al servidor.</td></tr>
+    <tr><td>Librerías</td><td>jQuery 1.10.2, Flexslider, Masonry, Superfish</td><td>JS mínimo, nativo</td><td>Plugins de 2013 que hoy se resuelven con CSS.</td></tr>
+  </table></div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="num">05</span><h2>SEO</h2></div>
+  <div class="findings">
+    <div class="f"><span class="tag t-crit">Crítico</span><div><h4>No hay <code>sitemap.xml</code> ni <code>robots.txt</code></h4><p>Ambos devuelven un error 404 de IIS. Google tiene que adivinar qué páginas existen; los más de 2.900 artículos de noticias y las fichas de torneos pierden visibilidad.</p></div></div>
+    <div class="f"><span class="tag t-high">Alto</span><div><h4>Sin H1 en la portada</h4><p>Ninguna etiqueta <code>&lt;h1&gt;</code>. Los titulares usan <code>&lt;h3&gt;</code> sin <code>&lt;h2&gt;</code> previos: la estructura semántica está rota.</p></div></div>
+    <div class="f"><span class="tag t-high">Alto</span><div><h4>Sin Open Graph ni datos estructurados</h4><p>Al compartir en WhatsApp, X o Facebook no aparece imagen ni resumen. No hay <code>schema.org</code> de <em>SportsOrganization</em>, <em>SportsEvent</em> ni <em>NewsArticle</em>: Google no puede mostrar los torneos como eventos enriquecidos.</p></div></div>
+    <div class="f"><span class="tag t-med">Medio</span><div><h4>URLs mixtas y sin canónicas</h4><p>Conviven <code>/Rankings</code>, <code>noticia.asp?Idnoticia=2973</code>, <code>Camp_Equipos.asp?IdTorneo=…</code> y subdominios <code>http://</code> sin cifrar (circuitomenores, formacionfep.es). No hay <code>rel="canonical"</code>.</p></div></div>
+    <div class="f"><span class="tag t-med">Medio</span><div><h4>Favicon de baja resolución</h4><p>Se usa un icono Apple de 57×57 px como favicon general; no hay manifest ni iconos para Android.</p></div></div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="num">06</span><h2>Accesibilidad</h2></div>
+  <p class="lead">Como entidad de utilidad pública que recibe fondos públicos, la FEP debe tender al cumplimiento de la norma UNE-EN 301 549 / WCAG 2.1 AA. Además, su apuesta por el Pádel Adaptado hace aún más coherente una web accesible.</p>
+  <div class="grid2">
+    <div class="card"><h3>Incidencias detectadas</h3><ul>
+      <li>66&nbsp;% de las imágenes de portada sin <code>alt</code>.</li>
+      <li>Zoom bloqueado en móvil.</li>
+      <li>Información esencial solo en imágenes (carteles, rankings).</li>
+      <li>Iconos de redes sociales sin texto accesible.</li>
+      <li>Contraste insuficiente en textos grises sobre gris del pie y fechas.</li>
+      <li>Carrusel automático sin control de pausa.</li>
+    </ul></div>
+    <div class="card"><h3>Objetivo</h3><ul>
+      <li>WCAG 2.1 AA verificado con auditoría automática y manual.</li>
+      <li>Navegación completa por teclado y foco visible.</li>
+      <li>Declaración de accesibilidad publicada.</li>
+      <li>Respeto a <code>prefers-reduced-motion</code> y modo oscuro.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="num">07</span><h2>Tecnología, seguridad y legal</h2></div>
+  <div class="findings">
+    <div class="f"><span class="tag t-crit">Crítico</span><div><h4>Servidor fuera de soporte</h4><p>Cabecera <code>Server: Microsoft-IIS/8.5</code> → Windows Server 2012 R2, sin parches de seguridad desde octubre de 2023. Además se exponen <code>X-Powered-By: ASP.NET</code> y <code>PleskWin</code>, lo que facilita el trabajo a un atacante.</p></div></div>
+    <div class="f"><span class="tag t-crit">Crítico</span><div><h4>Sin aviso ni gestión de cookies</h4><p>Se cargan Google Analytics (GA4 y Universal Analytics, este último retirado por Google) y adsense.js sin pedir consentimiento previo. Incumple el art. 22.2 LSSI y el RGPD; riesgo de sanción de la AEPD.</p></div></div>
+    <div class="f"><span class="tag t-high">Alto</span><div><h4>Páginas de error detalladas de IIS públicas</h4><p>Las URL inexistentes muestran el error detallado del servidor («IIS 8.5 Detailed Error»), que revela rutas internas y configuración.</p></div></div>
+    <div class="f"><span class="tag t-high">Alto</span><div><h4>Sin cabeceras de seguridad</h4><p>Faltan <code>Strict-Transport-Security</code>, <code>Content-Security-Policy</code>, <code>X-Frame-Options</code>, <code>X-Content-Type-Options</code> y <code>Referrer-Policy</code>.</p></div></div>
+    <div class="f"><span class="tag t-high">Alto</span><div><h4>Librerías con vulnerabilidades conocidas</h4><p>jQuery 1.10.2 tiene varias vulnerabilidades XSS publicadas (CVE-2015-9251, CVE-2019-11358, CVE-2020-11022/11023).</p></div></div>
+    <div class="f"><span class="tag t-med">Medio</span><div><h4>ASP clásico</h4><p>Tecnología discontinuada por Microsoft, con muy pocos profesionales disponibles: cada cambio es caro y arriesgado. Codificación mezclada (Latin-1/UTF-8) que provoca los caracteres rotos.</p></div></div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="num">08</span><h2>Propuesta de rediseño</h2></div>
+  <p class="lead">Una web pensada para tres públicos — <strong>federados</strong> (gestiones), <strong>aficionados y medios</strong> (actualidad y selecciones) y <strong>clubes, árbitros y técnicos</strong> (competición y formación) — con la marca FEP en primer plano.</p>
+
+  <div class="grid3">
+    <div class="card"><h3>1 · Tareas primero</h3><p>Barra de accesos rápidos en la portada: Mi licencia, Rankings, Calendario, Inscripciones, Formación y Certificados. Todo a un toque desde el móvil.</p></div>
+    <div class="card"><h3>2 · Actualidad con impacto</h3><p>Noticia principal a pantalla completa, franja de las selecciones (ahora mismo, el Mundial de Qatar) y rejilla de noticias con categorías.</p></div>
+    <div class="card"><h3>3 · Competición viva</h3><p>Próximos eventos como fichas con fecha, sede, categoría y estado de inscripción, filtrables por Absoluto, Menores, Veteranos y Pádel en silla.</p></div>
+    <div class="card"><h3>4 · Marca rotunda</h3><p>Rojo FEP, amarillo pelota y azul noche. Tipografía condensada deportiva, fotografía grande y ángulos inspirados en la pista.</p></div>
+    <div class="card"><h3>5 · Patrocinio con valor</h3><p>Los patrocinadores pasan de banners sueltos a un carrusel de marcas uniforme y espacios patrocinados integrados («Ranking Menores by Babolat»).</p></div>
+    <div class="card"><h3>6 · Rápida y accesible</h3><p>Imágenes WebP/AVIF responsivas, carga diferida, JS mínimo, WCAG 2.1 AA, modo oscuro y textos reales en lugar de imágenes.</p></div>
+  </div>
+
+  <h3 style="font-size:28px;text-transform:uppercase;margin:36px 0 14px">Nueva arquitectura de información</h3>
+  <p class="lead" style="font-size:16px">De 9 apartados y 45+ enlaces a 6 apartados claros, más un área privada «Mi FEP».</p>
+  <div class="ia">
+    <div class="col"><h5>Competición</h5><ul><li>Calendario unificado (con filtros)</li><li>Campeonatos de España</li><li>Rankings</li><li>Circuito de Menores</li><li>Pádel en silla</li><li>Retransmisiones</li><li>Arbitraje y hoteles</li></ul></div>
+    <div class="col"><h5>Selecciones</h5><ul><li>Absoluta masculina</li><li>Absoluta femenina</li><li>Menores</li><li>Veteranos</li><li>Palmarés</li></ul></div>
+    <div class="col"><h5>Licencias</h5><ul><li>Mi licencia / alta</li><li>Buscar licencia</li><li>Certificados</li><li>Seguro deportivo</li><li>Portal del federado/a</li></ul></div>
+    <div class="col"><h5>Formación</h5><ul><li>Calendario de cursos</li><li>Inscripciones</li><li>Campus online</li><li>Exámenes y prácticas</li><li>Registro de técnicos y árbitros</li></ul></div>
+    <div class="col"><h5>Actualidad</h5><ul><li>Noticias</li><li>Galerías y vídeo</li><li>Mujer y Pádel</li><li>Pádel Adaptado</li><li>Sala de prensa</li></ul></div>
+    <div class="col"><h5>Federación</h5><ul><li>Órganos de gobierno</li><li>Transparencia</li><li>Federaciones autonómicas</li><li>Clubes</li><li>Normativa y circulares</li><li>Homologaciones</li><li>Antidopaje</li><li>Contacto</li></ul></div>
+  </div>
+
+  <h3 style="font-size:28px;text-transform:uppercase;margin:36px 0 14px">Sistema visual</h3>
+  <div class="swatches">
+    <div class="sw"><div style="background:#e30613"></div><span><b>Rojo FEP</b>#E30613 · acción</span></div>
+    <div class="sw"><div style="background:#0d1b3d"></div><span><b>Azul noche</b>#0D1B3D · base</span></div>
+    <div class="sw"><div style="background:#d4f000"></div><span><b>Amarillo pelota</b>#D4F000 · acento</span></div>
+    <div class="sw"><div style="background:#1f5bd8"></div><span><b>Azul pista</b>#1F5BD8 · info</span></div>
+    <div class="sw"><div style="background:#f5f6f9"></div><span><b>Niebla</b>#F5F6F9 · fondo</span></div>
+  </div>
+  <p style="margin-top:14px;font-size:15px;color:var(--ink-2)">Tipografías: <strong style="font-family:'Barlow Condensed';font-size:20px">BARLOW CONDENSED</strong> para titulares y cifras, <strong>Inter</strong> para texto e interfaz.</p>
+</section>
+
+<section>
+  <div class="sec-head"><span class="num">09</span><h2>Plan de acción priorizado</h2></div>
+  <div class="tbl-wrap"><table>
+    <tr><th>#</th><th>Acción</th><th>Impacto</th><th>Esfuerzo</th><th>Plazo</th></tr>
+    <tr><td>1</td><td>Banner y gestor de consentimiento de cookies; retirar Universal Analytics y adsense.js</td><td>Legal</td><td>Bajo</td><td>Inmediato</td></tr>
+    <tr><td>2</td><td>Ocultar cabeceras de versión, desactivar errores detallados de IIS, añadir cabeceras de seguridad</td><td>Seguridad</td><td>Bajo</td><td>Inmediato</td></tr>
+    <tr><td>3</td><td>Arreglar carrusel superpuesto, caracteres rotos, «© 2015», Google+, título de Rankings</td><td>Imagen</td><td>Bajo</td><td>1 semana</td></tr>
+    <tr><td>4</td><td>Comprimir carteles (WebP, máx. 150 KB), <code>loading="lazy"</code>, quitar <code>maximum-scale</code></td><td>Rendimiento</td><td>Bajo</td><td>1 semana</td></tr>
+    <tr><td>5</td><td>Publicar <code>robots.txt</code> y <code>sitemap.xml</code>, añadir H1, Open Graph y <code>alt</code></td><td>SEO</td><td>Bajo</td><td>2 semanas</td></tr>
+    <tr><td>6</td><td>Migrar servidor (o alojamiento gestionado) y plataforma a tecnología con soporte</td><td>Seguridad</td><td>Alto</td><td>Con el rediseño</td></tr>
+    <tr><td>7</td><td>Rediseño integral con nueva arquitectura, CMS y sistema de diseño</td><td>Global</td><td>Alto</td><td>4–6 meses</td></tr>
+  </table></div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="num">10</span><h2>Hoja de ruta</h2></div>
+  <div class="timeline">
+    <div class="phase"><div class="w">Mes 0 · 2–4 semanas</div><h3>Parches urgentes</h3><ul><li>Cookies y legal</li><li>Seguridad del servidor</li><li>Errores visibles</li><li>Peso de imágenes</li><li>Sitemap y robots</li></ul></div>
+    <div class="phase"><div class="w">Mes 1–2</div><h3>Descubrimiento y diseño</h3><ul><li>Analítica y entrevistas a federados, clubes y FFAA</li><li>Arquitectura y prototipos</li><li>Sistema de diseño</li><li>Inventario de contenidos</li></ul></div>
+    <div class="phase"><div class="w">Mes 3–5</div><h3>Desarrollo</h3><ul><li>CMS (p. ej. WordPress headless, Strapi o Drupal)</li><li>Integración con licencias, rankings e inscripciones vía API</li><li>Migración de 2.900+ noticias con redirecciones 301</li></ul></div>
+    <div class="phase"><div class="w">Mes 6</div><h3>Lanzamiento</h3><ul><li>Auditoría WCAG y rendimiento</li><li>Lanzamiento en beta pública</li><li>Medición de KPI y mejora continua</li></ul></div>
+  </div>
+
+  <h3 style="font-size:28px;text-transform:uppercase;margin:36px 0 14px">Indicadores de éxito</h3>
+  <div class="grid3">
+    <div class="card"><div class="kpi" style="color:var(--green)">&lt; 2,5 s</div><div class="kpi-l">LCP en móvil 4G (Core Web Vitals en verde)</div></div>
+    <div class="card"><div class="kpi" style="color:var(--green)">≥ 90</div><div class="kpi-l">Puntuación Lighthouse en rendimiento, accesibilidad y SEO</div></div>
+    <div class="card"><div class="kpi" style="color:var(--green)">2 toques</div><div class="kpi-l">Para llegar a licencia, ranking, calendario o inscripción desde cualquier página</div></div>
+  </div>
+</section>
+
+<div class="cta">
+  <div><h2>Ver el rediseño</h2><p>Prototipo navegable de la nueva portada, con contenido real de la web actual.</p></div>
+  <a class="btn" href="rediseno/index.html">Abrir prototipo →</a>
+</div>
+
+</main>
+<footer class="wrap">Estudio elaborado el 5 de noviembre de 2026 a partir de la web pública www.padelfederacion.es. Las mediciones de rendimiento se tomaron en una sola sesión y conviene confirmarlas con PageSpeed Insights y la analítica real.</footer>
+</body>
+</html>

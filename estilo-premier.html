@@ -1,0 +1,835 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Federación Española de Pádel · FEP</title>
+<meta name="description" content="Federación Española de Pádel: selección, competiciones, calendario, rankings, licencias y formación.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@300;500;700;800&family=Saira:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#080808; --panel:#151515; --line:#2a2a2a; --glass:rgba(255,255,255,.07); --glass-2:rgba(255,255,255,.12);
+  --white:#fff; --ink:#0d0d0d; --g100:#f2f2f2; --g200:#e4e4e4; --g400:#a3a3a3; --g500:#8a8a8a; --g600:#5f5f5f;
+  --red:#e30613; --red-d:#b30510; --gold:#fcbc00; --gold-soft:#d9b25c;
+  --wrap:1360px; --r:22px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Saira,system-ui,sans-serif;font-size:15px;line-height:1.5;color:#fff;background:var(--bg);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 32px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.cond{font-family:"Saira Condensed",sans-serif}
+
+/* Textura de curvas de nivel */
+.topo{position:relative;isolation:isolate}
+.topo:before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.9;
+  background:
+    repeating-radial-gradient(ellipse 60% 45% at 85% 10%,transparent 0 26px,rgba(255,255,255,.035) 27px 28px),
+    repeating-radial-gradient(ellipse 50% 60% at 5% 90%,transparent 0 30px,rgba(255,255,255,.03) 31px 32px);
+  -webkit-mask:linear-gradient(#000,rgba(0,0,0,.4));mask:linear-gradient(#000,rgba(0,0,0,.4))}
+
+/* Títulos a dos pesos */
+.tt{font-family:"Saira Condensed",sans-serif;text-transform:uppercase;line-height:.92;letter-spacing:.5px}
+.tt span{display:block;font-weight:300;font-size:clamp(24px,2.6vw,36px);letter-spacing:1px}
+.tt b{display:block;font-weight:800;font-size:clamp(36px,4.4vw,60px)}
+.sh{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:28px}
+
+/* Botones */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap;font-family:"Saira Condensed";font-weight:700;font-size:15px;text-transform:uppercase;letter-spacing:.8px;padding:12px 22px;border-radius:10px;transition:.18s}
+.btn:active{transform:scale(.97)}
+.btn-red{background:var(--red);color:#fff}.btn-red:hover{background:var(--red-d)}
+.btn-gold{background:linear-gradient(180deg,#ffd34d,var(--gold));color:var(--ink);box-shadow:inset 0 -2px 0 rgba(0,0,0,.15)}.btn-gold:hover{filter:brightness(1.07)}
+.btn-line{border:1.5px solid currentColor}.btn-line:hover{background:#fff;color:var(--ink);border-color:#fff}
+.on-light .btn-line:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+.btn-sm{padding:8px 14px;font-size:13px;border-radius:8px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;padding:4px 10px;border-radius:6px;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.25);backdrop-filter:blur(6px)}
+
+/* ===== Franja federaciones ===== */
+.strip{background:#000;border-bottom:1px solid #1c1c1c;font-size:12px;color:var(--g400)}
+.strip .wrap{display:flex;align-items:center;gap:20px;height:34px}
+.strip .comp{display:flex;align-items:center;gap:6px;white-space:nowrap}
+.strip .comp:hover,.strip .fip a:hover{color:#fff}
+.feds{display:flex;gap:6px;align-items:center;flex:1;justify-content:center;overflow-x:auto;scrollbar-width:none}
+.feds::-webkit-scrollbar{display:none}
+.feds a{width:24px;height:16px;border-radius:3px;overflow:hidden;flex:none;opacity:.7;transition:opacity .15s,transform .15s;box-shadow:0 0 0 1px rgba(255,255,255,.15)}
+.feds a img{width:100%;height:100%;object-fit:cover}
+.feds a:hover,.feds a:focus-visible{opacity:1;transform:translateY(-1px)}
+.fip{display:flex;gap:16px;white-space:nowrap}
+
+/* ===== Cabecera ===== */
+.nav{position:sticky;top:0;z-index:60;background:linear-gradient(180deg,#000 0%,rgba(10,10,10,.92) 100%);backdrop-filter:blur(12px);border-bottom:1px solid #1c1c1c}
+.nav > .wrap{display:flex;align-items:center;gap:28px;height:76px}
+.brand{flex:none;display:flex;align-items:center}
+.brand img{height:58px;width:auto}
+.menu{display:flex;gap:2px;flex:1;justify-content:center;list-style:none;align-self:stretch}
+.menu > li{display:flex;align-items:center}
+.mtop{display:flex;align-items:center;gap:4px;height:100%;padding:0 14px;font-family:"Saira Condensed";font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;position:relative;transition:color .15s}
+.mtop:after{content:"";position:absolute;left:14px;right:14px;bottom:0;height:3px;background:var(--red);transform:scaleX(0);transition:transform .2s}
+.mtop:hover,.mtop[aria-expanded="true"]{color:var(--gold)}
+.mtop[aria-expanded="true"]:after{transform:none}
+.menu .caret{width:14px;height:14px;opacity:.6;transition:transform .2s}
+.mtop[aria-expanded="true"] .caret{transform:rotate(180deg)}
+.tools{display:flex;gap:6px;align-items:center;flex:none}
+.ico{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;transition:.15s}
+.ico:hover{background:var(--glass-2)}
+.burger{display:none}
+
+/* Megamenú */
+.mega{position:absolute;left:0;right:0;top:100%;background:rgba(14,14,14,.98);border-top:1px solid var(--line);box-shadow:0 30px 60px rgba(0,0,0,.6);opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .18s,transform .18s,visibility 0s .18s}
+.mega.open{opacity:1;visibility:visible;transform:none;transition:opacity .18s,transform .18s}
+.mega-in{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:36px;padding-top:34px;padding-bottom:38px;align-items:start}
+.mega-in.has-feat{grid-template-columns:repeat(var(--cols,3),minmax(0,1fr)) 300px}
+.mcol h5{font-family:"Saira Condensed";font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1.6px;color:var(--gold);margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.mcol a{display:block;padding:7px 0;font-size:15px;color:#d0d0d0;transition:color .15s,transform .15s}
+.mcol a:hover,.mcol a:focus-visible{color:#fff;transform:translateX(3px)}
+.mcol a small{display:block;font-size:12px;color:var(--g500)}
+.mfeat{display:flex;flex-direction:column;justify-content:flex-end;gap:6px;min-height:180px;padding:22px;border-radius:16px;background:linear-gradient(140deg,var(--red) 0%,#5c0207 100%);transition:transform .2s}
+.mfeat:hover{transform:translateY(-3px)}
+.mfeat small{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.4px;opacity:.85}
+.mfeat b{font-family:"Saira Condensed";font-size:24px;font-weight:800;line-height:1.02;text-transform:uppercase}
+.mfeat span{font-size:14px;opacity:.9}
+.mfeat.alt{background:linear-gradient(140deg,#2b2b2b 0%,#111 100%);box-shadow:inset 0 0 0 1px #333}
+.mfeat.alt small{color:var(--gold);opacity:1}
+
+/* ===== Barra de evento ===== */
+.eventbar{background:#fff;color:var(--ink)}
+.eventbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;height:62px}
+.eventbar a.ev-name{display:flex;flex-direction:column;line-height:1.05}
+.eventbar a.ev-name small{font-size:11px;font-weight:600;letter-spacing:.8px;color:var(--g600);text-transform:uppercase}
+.eventbar a.ev-name b{font-family:"Saira Condensed";font-size:21px;font-weight:800;text-transform:uppercase;display:flex;align-items:center;gap:4px}
+.eventbar a.ev-name:hover b{color:var(--red)}
+.cd{display:flex;align-items:center;gap:6px}
+.cd > span{font-size:11px;font-weight:600;color:var(--g600);text-transform:uppercase;letter-spacing:.8px;margin-right:6px}
+.cd div{display:flex;flex-direction:column;align-items:center;min-width:46px;padding:3px 0;border-radius:8px;background:var(--g100)}
+.cd b{font-family:"Saira Condensed";font-size:22px;font-weight:800;line-height:1}
+.cd small{font-size:9px;font-weight:600;color:var(--g600);text-transform:uppercase;letter-spacing:.6px}
+
+/* ===== Hero ===== */
+.hero{position:relative;height:min(78vh,720px);min-height:520px;overflow:hidden;background:#000}
+.hero .slide{position:absolute;inset:0;opacity:0;transition:opacity .9s}
+.hero .slide.on{opacity:1}
+.hero .slide img{width:100%;height:100%;object-fit:cover;object-position:center 30%;transform:scale(1.04);transition:transform 7s linear}
+.hero .slide.on img{transform:scale(1)}
+.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.85) 0%,rgba(0,0,0,.45) 45%,rgba(0,0,0,0) 75%),linear-gradient(0deg,var(--bg) 0%,rgba(8,8,8,0) 38%)}
+.hero-c{position:absolute;inset:0;z-index:2;display:flex;align-items:center}
+.hero-c .wrap{width:100%}
+.kicker{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1.4px;color:var(--gold);margin-bottom:14px}
+.kicker:before{content:"";width:26px;height:2px;background:var(--gold)}
+.hero h1{font-family:"Saira Condensed";text-transform:uppercase;line-height:.86;max-width:760px}
+.hero h1 .l1{display:block;font-weight:300;font-size:clamp(30px,3.6vw,52px);letter-spacing:2px}
+.hero h1 .l2{display:block;font-weight:800;font-size:clamp(58px,8.6vw,128px);letter-spacing:-.5px}
+.hero h1 .l3{display:block;font-weight:500;font-size:clamp(28px,3.4vw,48px);letter-spacing:3px;color:var(--gold)}
+.hero p{max-width:520px;margin:18px 0 26px;color:#d6d6d6;font-size:17px}
+.hero .cta-row{display:flex;gap:12px;flex-wrap:wrap}
+.dots{position:absolute;z-index:3;left:0;right:0;bottom:150px}
+.dots .wrap{display:flex;gap:8px}
+.dots button{width:28px;height:4px;border-radius:4px;background:rgba(255,255,255,.3);transition:.3s}
+.dots button[aria-selected="true"]{width:56px;background:#fff}
+
+/* Tarjetas sobre el hero */
+.over{position:relative;z-index:4;margin-top:-120px}
+.over .wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.oc{position:relative;display:block;height:250px;border-radius:var(--r);overflow:hidden;border:1px solid rgba(255,255,255,.12);background:#111}
+.oc img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.oc:hover img{transform:scale(1.05)}
+.oc:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.92) 0%,rgba(0,0,0,.1) 60%)}
+.oc .chip{position:absolute;top:14px;left:14px;z-index:2}
+.oc h3{position:absolute;left:18px;right:18px;bottom:16px;z-index:2;font-size:17px;font-weight:600;line-height:1.3}
+.oc h3 small{display:block;font-size:12px;color:var(--g400);font-weight:500;margin-bottom:4px}
+.play{position:absolute;z-index:2;top:50%;left:50%;transform:translate(-50%,-60%);width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.18);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.35)}
+.play svg{width:20px;height:20px;fill:#fff;margin-left:3px}
+
+/* ===== Secciones ===== */
+.sec{padding:84px 0}
+.sec-sm{padding:48px 0}
+
+/* Zona federado: paneles de cristal */
+.zone{display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:20px}
+.zp{border-radius:var(--r);background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.1);padding:24px;display:flex;flex-direction:column;min-height:360px}
+.zp h3{font-family:"Saira Condensed";font-size:26px;font-weight:800;text-transform:uppercase;line-height:1;margin-bottom:6px}
+.zp > p{color:var(--g400);font-size:14px;margin-bottom:18px}
+.zp .foot{margin-top:auto;padding-top:18px}
+.field{display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:4px 4px 4px 14px}
+.field input{flex:1;min-width:0;background:none;border:0;color:#fff;font:inherit;padding:10px 0}
+.field input::placeholder{color:var(--g500)}
+.field input:focus{outline:none}
+.field:focus-within{border-color:var(--gold)}
+.quick-l{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.quick-l a{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:12px 14px;border-radius:12px;background:rgba(255,255,255,.06);font-size:14px;font-weight:500;transition:.15s}
+.quick-l a:hover{background:rgba(255,255,255,.14)}
+.match{display:flex;flex-direction:column;gap:10px}
+.mrow{display:grid;grid-template-columns:58px 1fr auto;align-items:center;gap:12px;padding:12px;border-radius:14px;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.06);transition:.15s}
+.mrow:hover{border-color:rgba(255,255,255,.25)}
+.mrow .dt{text-align:center;font-family:"Saira Condensed";line-height:1}
+.mrow .dt b{display:block;font-size:22px;font-weight:800}
+.mrow .dt small{font-size:11px;color:var(--g400);text-transform:uppercase;letter-spacing:.8px}
+.mrow h4{font-size:14px;font-weight:600;line-height:1.25}
+.mrow h4 small{display:block;font-size:12px;color:var(--g400);font-weight:400;margin-top:2px}
+.tag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;padding:3px 8px;border-radius:5px;background:var(--c,#444);color:#fff;white-space:nowrap}
+.c-men{--c:#1f5bd8}.c-sil{--c:#7a3cf0}.c-vet{--c:#ff7a1a}.c-abs{--c:var(--red)}.c-for{--c:#0e9f5a}
+.seg{display:flex;gap:4px;padding:4px;border-radius:10px;background:rgba(0,0,0,.45);margin-bottom:14px}
+.seg button{flex:1;padding:8px;border-radius:7px;font-size:13px;font-weight:600;color:var(--g400)}
+.seg button[aria-selected="true"]{background:#fff;color:var(--ink)}
+.rk{list-style:none;display:flex;flex-direction:column;gap:6px}
+.rk li a{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.05);font-size:14px;transition:.15s}
+.rk li a:hover{background:rgba(255,255,255,.12)}
+.rk .n{font-family:"Saira Condensed";font-size:22px;font-weight:800;color:var(--gold);width:22px}
+.rk small{margin-left:auto;color:var(--g400);font-size:12px}
+
+/* Momentos numerados */
+.moments{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding-bottom:6px}
+.moments::-webkit-scrollbar{display:none}
+.mo{position:relative;flex:0 0 calc((100% - 54px)/4);aspect-ratio:3/4;border-radius:var(--r);overflow:hidden;scroll-snap-align:start;background:#111;border:1px solid rgba(255,255,255,.1)}
+.mo img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.mo:hover img{transform:scale(1.05)}
+.mo:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,0) 30%,rgba(0,0,0,.9) 100%)}
+.mo .num{position:absolute;z-index:2;top:8px;left:14px;font-family:"Saira Condensed";font-size:84px;font-weight:800;line-height:1;color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.9)}
+.mo .chip{position:absolute;z-index:2;left:14px;bottom:70px}
+.mo h3{position:absolute;z-index:2;left:14px;right:14px;bottom:14px;font-size:16px;font-weight:600;line-height:1.25}
+.car-ctrl{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:22px}
+.car-ctrl button{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(255,255,255,.25);transition:.15s}
+.car-ctrl button:hover{background:#fff;color:var(--ink)}
+.bar-p{width:120px;height:3px;border-radius:3px;background:rgba(255,255,255,.2);overflow:hidden}
+.bar-p i{display:block;height:100%;width:25%;background:#fff;border-radius:3px;transition:transform .2s}
+
+/* Barra "tu federación" */
+.foryou{display:flex;align-items:center;gap:20px;padding:18px 22px;border-radius:var(--r);background:linear-gradient(90deg,rgba(255,255,255,.1),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.12)}
+.foryou .plus{width:48px;height:48px;border-radius:12px;background:#fff;color:var(--ink);display:grid;place-items:center;flex:none}
+.foryou h3{font-family:"Saira Condensed";font-size:22px;font-weight:800;text-transform:uppercase;line-height:1}
+.foryou p{color:var(--g400);font-size:14px}
+.foryou select{margin-left:auto;appearance:none;background:#000 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center/16px;color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:10px;padding:12px 40px 12px 14px;font:inherit;font-weight:600;min-width:230px}
+
+/* Paneles blancos redondeados */
+.panel{background:#fff;color:var(--ink);border-radius:32px}
+.panel.top{border-radius:32px 32px 0 0}
+.panel.bottom{border-radius:0 0 32px 32px}
+.panel .tt{color:var(--ink)}
+.pad{padding:48px}.pad-x{padding:0 48px}
+
+/* Pósters de torneos */
+.posters{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding-bottom:4px}
+.posters::-webkit-scrollbar{display:none}
+.po{position:relative;flex:0 0 calc((100% - 72px)/5);min-width:230px;aspect-ratio:3/4.3;border-radius:20px;overflow:hidden;scroll-snap-align:start;color:#fff;background:#111;display:flex;flex-direction:column;justify-content:flex-end;padding:18px;isolation:isolate;transition:transform .25s}
+.po:hover{transform:translateY(-4px)}
+.po img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;filter:saturate(.8)}
+.po:before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(0,0,0,.6) 0%,rgba(0,0,0,.2) 35%,color-mix(in srgb,var(--c) 55%,#000) 100%)}
+.po .top{position:absolute;top:12px;left:12px;right:12px;display:flex;justify-content:space-between;align-items:center;font-size:11px;font-weight:600}
+.po .top .tag{font-size:10px}
+.po .when{font-family:"Saira Condensed";font-size:16px;font-weight:500;letter-spacing:1px;text-transform:uppercase;opacity:.95}
+.po h3{font-family:"Saira Condensed";font-size:24px;font-weight:800;text-transform:uppercase;line-height:1;margin:4px 0 8px}
+.po .where{font-size:13px;opacity:.85;display:flex;align-items:center;gap:6px}
+.po .acts{display:flex;gap:6px;margin-top:14px}
+.po .acts span{flex:1;text-align:center;font-size:12px;font-weight:600;padding:8px;border-radius:8px;background:rgba(255,255,255,.16);backdrop-filter:blur(6px)}
+.po .acts span.hl{background:#fff;color:var(--ink)}
+
+/* Banner promocional */
+.promo{position:relative;display:grid;grid-template-columns:1.2fr 1fr;align-items:center;border-radius:28px;overflow:hidden;min-height:300px;background:linear-gradient(110deg,var(--red) 0%,#ff5a1f 55%,var(--gold) 100%);color:#fff}
+.promo .txt{padding:44px 48px;position:relative;z-index:2}
+.promo .txt small{font-size:13px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;opacity:.9}
+.promo h2{font-family:"Saira Condensed";font-size:clamp(36px,4.6vw,64px);font-weight:800;text-transform:uppercase;line-height:.9;margin:10px 0 14px}
+.promo p{max-width:440px;opacity:.95;margin-bottom:22px}
+.promo .pic{position:relative;height:100%;min-height:300px}
+.promo .pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;-webkit-mask:linear-gradient(90deg,transparent,#000 35%);mask:linear-gradient(90deg,transparent,#000 35%)}
+.promo .btn-white{background:#fff;color:var(--ink)}.promo .btn-white:hover{background:var(--ink);color:#fff}
+
+/* Categorías (tarjetas tipo jugador) */
+.cats{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+.cat{position:relative;aspect-ratio:3/4;border-radius:20px;overflow:hidden;background:#0d0d0d;color:#fff;isolation:isolate;transition:transform .25s}
+.cat:hover{transform:translateY(-4px)}
+.cat img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.cat:before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(0,0,0,.05) 30%,rgba(0,0,0,.9) 100%)}
+.cat .ic{position:absolute;top:12px;left:12px;width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:rgba(255,255,255,.18);backdrop-filter:blur(6px)}
+.cat .ic svg{width:18px;height:18px}
+.cat .nm{position:absolute;left:12px;right:12px;bottom:12px;padding:12px 14px;border-radius:14px;background:rgba(0,0,0,.55);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.12)}
+.cat .nm small{display:block;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--g400)}
+.cat .nm b{font-family:"Saira Condensed";font-size:22px;font-weight:800;text-transform:uppercase;line-height:1}
+.cat .nm i{position:absolute;right:14px;top:50%;transform:translateY(-50%);width:6px;height:28px;border-radius:3px;background:var(--c)}
+
+/* Noticias en carrusel */
+.newsrow{display:grid;grid-template-columns:300px 1fr;gap:32px;align-items:start}
+.newsrow > *{min-width:0}
+.newsrow .intro p{color:var(--g400);margin:16px 0 24px;max-width:280px}
+.ncards{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.ncards::-webkit-scrollbar{display:none}
+.nc{flex:0 0 calc((100% - 36px)/3);min-width:260px;scroll-snap-align:start}
+.nc .ph{position:relative;aspect-ratio:16/10;border-radius:18px;overflow:hidden;background:#111;margin-bottom:14px}
+.nc .ph img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.nc:hover .ph img{transform:scale(1.05)}
+.nc .meta{display:flex;gap:6px;margin-bottom:8px}
+.nc .meta span{font-size:11px;font-weight:600;padding:3px 9px;border-radius:5px;background:#fff;color:var(--ink);text-transform:uppercase;letter-spacing:.5px}
+.nc .meta span.d{background:rgba(255,255,255,.12);color:#fff}
+.nc h3{font-size:17px;font-weight:600;line-height:1.3}
+.nc:hover h3{color:var(--gold)}
+
+/* Banner licencia */
+.lic{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:40px;padding:56px;overflow:hidden;position:relative}
+.lic ul{list-style:none;display:grid;gap:10px;margin:22px 0 28px}
+.lic li{display:flex;gap:10px;align-items:center;font-weight:500}
+.lic li:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--red);flex:none}
+.lic .btns{display:flex;gap:12px;flex-wrap:wrap}
+.lic .card{position:relative;justify-self:center;width:min(420px,100%);aspect-ratio:1.586;border-radius:22px;padding:24px;color:#fff;background:radial-gradient(120% 140% at 100% 0%,#ff4a1a 0%,var(--red) 35%,#4d0206 100%);box-shadow:0 40px 70px -20px rgba(227,6,19,.55),0 0 0 1px rgba(255,255,255,.1) inset;transform:rotate(-6deg);display:flex;flex-direction:column;justify-content:space-between}
+.lic .card:after{content:"";position:absolute;inset:0;border-radius:inherit;background:repeating-radial-gradient(ellipse at 90% 110%,transparent 0 18px,rgba(255,255,255,.07) 19px 20px)}
+.lic .card img{height:46px;width:auto;position:relative;z-index:1}
+.lic .card .row{display:flex;justify-content:space-between;align-items:flex-end;position:relative;z-index:1}
+.lic .card .row small{display:block;font-size:10px;letter-spacing:1.2px;text-transform:uppercase;opacity:.75}
+.lic .card .row b{font-family:"Saira Condensed";font-size:20px;letter-spacing:2px}
+.lic .card .chipc{width:42px;height:32px;border-radius:6px;background:linear-gradient(135deg,#ffe08a,#c89b2c);position:relative;z-index:1}
+.lic .card.back{position:absolute;transform:rotate(4deg) translate(30px,18px);background:#1a1a1a;box-shadow:none;opacity:.9;z-index:-1}
+
+/* Patrocinadores */
+.partners{padding:56px}
+.partners h2{text-align:center;margin-bottom:8px}
+.partners .lbl{text-align:center;font-size:12px;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;color:var(--g500);margin:30px 0 16px}
+.plogos{display:flex;flex-wrap:wrap;justify-content:center;gap:16px}
+.plogos a{display:grid;place-items:center;width:180px;height:96px;border-radius:16px;background:var(--g100);transition:.2s}
+.plogos a:hover{background:var(--g200);transform:translateY(-2px)}
+.plogos img{max-height:62px;max-width:150px;mix-blend-mode:multiply}
+.plogos.main a{width:240px;height:120px}
+.plogos.main img{max-height:84px;max-width:200px}
+
+/* ===== Pie ===== */
+footer{padding:64px 0 0;border-top:1px solid #1a1a1a;margin-top:84px}
+.fcols{display:grid;grid-template-columns:1.4fr repeat(4,1fr);gap:32px;padding-bottom:44px}
+.fcols .brand img{height:76px}
+.fcols p{color:var(--g500);font-size:14px;margin-top:16px;max-width:280px}
+.fcols h4{font-family:"Saira Condensed";font-size:16px;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:14px}
+.fcols ul{list-style:none;display:grid;gap:9px;font-size:14px;color:var(--g400)}
+.fcols ul a:hover{color:#fff}
+.soc{display:flex;gap:8px;margin-top:20px}
+.soc a{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.08);transition:.15s}
+.soc a:hover{background:#fff;color:var(--ink)}
+.soc svg{width:18px;height:18px}
+.nl{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:28px 32px;border-radius:var(--r);background:linear-gradient(90deg,rgba(255,255,255,.08),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.1);margin-bottom:56px}
+.nl h3{font-family:"Saira Condensed";font-size:28px;font-weight:800;text-transform:uppercase;line-height:1}
+.nl p{color:var(--g400);font-size:14px}
+.nl form{display:flex;gap:8px;flex:0 1 460px}
+.nl input{flex:1;min-width:0;padding:12px 16px;border-radius:10px;border:1px solid rgba(255,255,255,.2);background:#000;color:#fff;font:inherit}
+.legal{border-top:1px solid #1a1a1a;font-size:13px;color:var(--g500)}
+.legal .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-top:20px;padding-bottom:24px}
+.legal nav{display:flex;gap:18px;flex-wrap:wrap}
+.legal a:hover{color:#fff}
+
+/* Menú móvil */
+.drawer{position:fixed;inset:0;z-index:90;visibility:hidden;overflow:hidden}
+.drawer.open{visibility:visible}
+.drawer .scrim{position:absolute;inset:0;background:rgba(0,0,0,.6);opacity:0;transition:opacity .25s}
+.drawer.open .scrim{opacity:1}
+.drawer .sheet{position:absolute;inset:0 0 0 auto;width:min(420px,90vw);background:#0b0b0b;border-left:1px solid var(--line);padding:18px 20px 28px;transform:translateX(100%);transition:transform .3s cubic-bezier(.2,.8,.2,1);overflow-y:auto}
+.drawer.open .sheet{transform:none}
+.drawer .head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.drawer .head img{height:46px}
+.drawer details{border-bottom:1px solid var(--line)}
+.drawer summary{list-style:none;padding:16px 0;font-family:"Saira Condensed";font-size:22px;font-weight:800;text-transform:uppercase;display:flex;justify-content:space-between;cursor:pointer}
+.drawer summary::-webkit-details-marker{display:none}
+.drawer summary:after{content:"+";color:var(--gold);font-size:24px;line-height:1}
+.drawer details[open] summary:after{content:"–"}
+.drawer details div{padding-bottom:14px}
+.drawer details h6{font-size:11px;text-transform:uppercase;letter-spacing:1.4px;color:var(--gold);padding:12px 0 4px 10px}
+.drawer details h6:first-child{padding-top:0}
+.drawer details a{display:block;padding:8px 0 8px 10px;color:#c4c4c4}
+.drawer .quick{display:flex;flex-wrap:wrap;gap:8px 18px;padding-top:20px;font-size:14px;color:var(--g400)}
+
+/* ===== Responsive ===== */
+@media (max-width:1240px){
+  .menu{display:none}.burger{display:grid}
+  .nav > .wrap{justify-content:space-between}
+  .zone{grid-template-columns:1fr 1fr}
+  .zone .zp:first-child{grid-column:1/-1;min-height:0}
+  .mo{flex-basis:calc((100% - 36px)/3)}
+  .cats{grid-template-columns:repeat(3,1fr)}
+  .newsrow{grid-template-columns:1fr}
+  .newsrow .intro{display:flex;justify-content:space-between;align-items:flex-end;gap:20px}
+  .newsrow .intro p{display:none}
+}
+@media (max-width:900px){
+  .wrap{padding:0 20px}
+  .fip{display:none}
+  .over .wrap{grid-template-columns:1fr 1fr}
+  .over .oc:nth-child(3){display:none}
+  .mo{flex-basis:calc((100% - 18px)/2)}
+  .zone{grid-template-columns:1fr}
+  .promo{grid-template-columns:1fr}
+  .promo .pic{min-height:200px;order:-1}
+  .promo .pic img{-webkit-mask:linear-gradient(0deg,transparent,#000 50%);mask:linear-gradient(0deg,transparent,#000 50%)}
+  .lic{grid-template-columns:1fr;padding:36px 28px}
+  .lic .card{transform:rotate(-4deg);width:min(340px,90%)}
+  .fcols{grid-template-columns:1fr 1fr}
+  .fcols > :first-child{grid-column:1/-1}
+  .nl{flex-direction:column;align-items:stretch}
+  .foryou{flex-wrap:wrap}
+  .foryou select{margin-left:0;width:100%}
+  .partners{padding:40px 20px}
+}
+@media (max-width:640px){
+  .wrap{padding:0 16px}
+  .strip .comp span{display:none}
+  .nav > .wrap{height:64px}
+  .brand img{height:46px}
+  .tools .btn,.tools .ico.user{display:none}
+  .eventbar .wrap{height:auto;padding-top:10px;padding-bottom:10px;flex-direction:column;align-items:flex-start;gap:8px}
+  .cd > span{display:none}
+  .cd div{min-width:40px}
+  .hero{min-height:560px}
+  .hero:after{background:linear-gradient(0deg,var(--bg) 8%,rgba(0,0,0,.55) 55%,rgba(0,0,0,.35) 100%)}
+  .hero-c{align-items:flex-end;padding-bottom:150px}
+  .dots{bottom:110px}
+  .over{margin-top:-90px}
+  .over .wrap{grid-template-columns:1fr;gap:12px}
+  .over .oc:nth-child(2){display:none}
+  .oc{height:200px}
+  .sec{padding:56px 0}
+  .sh{flex-wrap:wrap}
+  .mo{flex-basis:78%}
+  .po{flex-basis:72%}
+  .cats{grid-template-columns:1fr 1fr}
+  .nc{flex-basis:84%}
+  .panel{border-radius:24px}
+  .panel.top{border-radius:24px 24px 0 0}.panel.bottom{border-radius:0 0 24px 24px}
+  .lic .card.back{display:none}
+  .partners{padding:32px 16px}
+  .pad{padding:28px 16px}.pad-x{padding:0 16px}
+  .plogos a,.plogos.main a{width:calc(50% - 8px);height:88px}
+  .fcols{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<!-- Franja: competiciones, federaciones autonómicas, FIP -->
+<div class="strip">
+  <div class="wrap">
+    <a class="comp" href="https://www.padelfederacion.es/Campeonatos"><svg class="i" viewBox="0 0 24 24" style="width:15px;height:15px"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg><span>Competiciones</span></a>
+    <nav class="feds" aria-label="Federaciones autonómicas">
+      <a href="#" title="Andalucía"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Andalucía.svg?width=80" alt="Andalucía" width="24" height="16" loading="lazy"></a>
+      <a href="#" title="Aragón"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Aragon.svg?width=80" alt="Aragón" width="24" height="16" loading="lazy"></a>
+      <a href="#" title="Asturias"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Asturias.svg?width=80" alt="Asturias" width="24" height="16" loading="lazy"></a>
+      <a href="#" title="Illes Balears"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_the_Balearic_Islands.svg?width=80" alt="Illes Balears" width="24" height="16" loading="lazy"></a>
+      <a href="#" title="Canarias"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_the_Canary_Islands.svg?width=80" alt="Canarias" width="24" height="16" loading="lazy"></a>
+      <a href="#" title="Cantabria"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Cantabria.svg?width=80" alt="Cantabria" width="24" height="16" loading="lazy"></a>
+      <a href="#" title="Castilla-La Mancha"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Castile-La_Mancha.svg?width=80" alt="Castilla-La Mancha" width="24" height="16" loading="lazy"></a>
+      <a href="#" title="Castilla y León"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Castile_and_León.svg?width=80" alt="Castilla y León" width="24" height="16" loading="lazy"></a>
+      <a href="#" title="Cataluña"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Catalonia.svg?width=80" alt="Cataluña" width="24" height="16" loading="lazy"></a>
+      <a href="#" title="Ceuta"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Ceuta.svg?width=80" alt="Ceuta" width="24" height="16" loading="lazy"></a>
+      <a href="#" title="Extremadura"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Extremadura.svg?width=80" alt="Extremadura" width="24" height="16" loading="lazy"></a>
+      <a href="#" title="Galicia"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Galicia.svg?width=80" alt="Galicia" width="24" height="16" loading="lazy"></a>
+      <a href="#" title="Comunidad de Madrid"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_the_Community_of_Madrid.svg?width=80" alt="Comunidad de Madrid" width="24" height="16" loading="lazy"></a>
+      <a href="#" title="Melilla"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Melilla.svg?width=80" alt="Melilla" width="24" height="16" loading="lazy"></a>
+      <a href="#" title="Región de Murcia"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_the_Region_of_Murcia.svg?width=80" alt="Región de Murcia" width="24" height="16" loading="lazy"></a>
+      <a href="#" title="Navarra"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Navarre.svg?width=80" alt="Navarra" width="24" height="16" loading="lazy"></a>
+      <a href="#" title="País Vasco"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_the_Basque_Country.svg?width=80" alt="País Vasco" width="24" height="16" loading="lazy"></a>
+      <a href="#" title="La Rioja"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_La_Rioja.svg?width=80" alt="La Rioja" width="24" height="16" loading="lazy"></a>
+      <a href="#" title="Comunitat Valenciana"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_the_Valencian_Community_(2x3).svg?width=80" alt="Comunitat Valenciana" width="24" height="16" loading="lazy"></a>
+    </nav>
+    <div class="fip"><a href="#">FIP</a><a href="https://www.padelfederacion.es/Contacto">Contacto</a></div>
+  </div>
+</div>
+
+<!-- Cabecera -->
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#"><img src="img/logo-fep-negativo.svg" alt="Federación Española de Pádel, inicio" width="394" height="184"></a>
+    <ul class="menu" id="menu">
+      <li><button class="mtop" aria-expanded="false" aria-controls="m-comp">Competición<svg class="i caret" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="mega" id="m-comp"><div class="wrap mega-in has-feat" style="--cols:3">
+          <div class="mcol"><h5>Calendarios</h5>
+            <a href="https://www.padelfederacion.es/CalendarioFEP">Calendario FEP</a>
+            <a href="https://www.padelfederacion.es/CalendarioFT">Federaciones territoriales</a>
+            <a href="https://www.padelfederacion.es/Calendario_Menores_FFAA">Menores · FF. AA.</a>
+            <a href="https://www.padelfederacion.es/Calendario_Veteranos_FFAA">Veteranos · FF. AA.</a></div>
+          <div class="mcol"><h5>Torneos y resultados</h5>
+            <a href="https://www.padelfederacion.es/Campeonatos">Campeonatos de España</a>
+            <a href="https://www.padelfederacion.es/Rankings">Rankings</a>
+            <a href="https://www.padelfederacion.es/Estadisticas">Estadísticas</a>
+            <a href="https://www.padelfederacion.es/Retransmisiones">Retransmisiones</a>
+            <a href="https://www.padelfederacion.es/Programa_Impulso">Programa IMPULSO</a></div>
+          <div class="mcol"><h5>Organizadores y clubes</h5>
+            <a href="https://www.padelfederacion.es/Solicitud_Arbitraje">Solicitud de arbitraje</a>
+            <a href="https://www.padelfederacion.es/hoteles_Concertados">Oferta hotelera para torneos</a>
+            <a href="https://www.padelfederacion.es/microsite.asp?id=7">Homologaciones</a>
+            <a href="https://www.padelfederacion.es/Mantenimiento_Pistas">Mantenimiento de pistas</a></div>
+          <a class="mfeat" href="https://www.padelfederacion.es/Campeonatos"><small>Próximo evento</small><b>Cto. de España por equipos Junior e Infantil</b><span>Zaragoza · 6–8 de noviembre</span></a>
+        </div></div></li>
+      <li><button class="mtop" aria-expanded="false" aria-controls="m-sel">Selección<svg class="i caret" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="mega" id="m-sel"><div class="wrap mega-in has-feat" style="--cols:2">
+          <div class="mcol"><h5>Equipos nacionales</h5>
+            <a href="#seleccion">Absoluta<small>Masculina y femenina</small></a>
+            <a href="#seleccion">Menores</a>
+            <a href="#seleccion">Veteranos</a>
+            <a href="#seleccion">Pádel en silla</a></div>
+          <div class="mcol"><h5>Competición internacional</h5>
+            <a href="#seleccion">Mundial · FIP World Cup</a>
+            <a href="#seleccion">Campeonatos de Europa</a>
+            <a href="#seleccion">Convocatorias</a></div>
+          <a class="mfeat" href="https://www.padelfederacion.es/noticia.asp?Idnoticia=2973"><small>Mundial Qatar 2026</small><b>España, en cuartos de final</b><span>Sigue a la selección en la FIP World Cup</span></a>
+        </div></div></li>
+      <li><button class="mtop" aria-expanded="false" aria-controls="m-lic">Licencias<svg class="i caret" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="mega" id="m-lic"><div class="wrap mega-in has-feat" style="--cols:3">
+          <div class="mcol"><h5>Jugadores</h5>
+            <a href="https://www.padelfederacion.es/Consulta_Tu_Licencia">Tu licencia<small>Alta, renovación y cambios</small></a>
+            <a href="https://www.padelfederacion.es/Licencias_Buscar">Buscar licencia</a>
+            <a href="https://www.padelfederacion.es/Certificados">Solicitud de certificados</a></div>
+          <div class="mcol"><h5>Árbitros y técnicos</h5>
+            <a href="https://www.padelfederacion.es/Registro_Nacional_Arbitros">Registro Nacional de Árbitros</a>
+            <a href="https://www.padelfederacion.es/Registro_Arbitros_Categorias">Categorías arbitrales</a>
+            <a href="https://www.padelfederacion.es/Registro_Nacional_Tecnicos">Registro Nacional de Técnicos</a></div>
+          <div class="mcol"><h5>Clubes</h5>
+            <a href="https://www.padelfederacion.es/Clubes">Directorio de clubes</a>
+            <a href="https://www.padelfederacion.es/Federaciones">Tu federación autonómica</a></div>
+          <a class="mfeat alt" href="https://www.padelfederacion.es/Consulta_Tu_Licencia"><small>Federados</small><b>Consulta o renueva tu licencia</b><span>Todo online, en unos minutos</span></a>
+        </div></div></li>
+      <li><button class="mtop" aria-expanded="false" aria-controls="m-for">Formación<svg class="i caret" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="mega" id="m-for"><div class="wrap mega-in has-feat" style="--cols:2">
+          <div class="mcol"><h5>Cursos</h5>
+            <a href="https://www.padelfederacion.es/Formacion_Calendario">Calendario de cursos</a>
+            <a href="https://www.padelfederacion.es/Acciones_Formativas">Oferta formativa</a>
+            <a href="https://www.padelfederacion.es/Formacion_Inscripciones">Inscripciones</a></div>
+          <div class="mcol"><h5>Área del alumno</h5>
+            <a href="http://www.formacionfep.es/campus/">Campus online</a>
+            <a href="https://www.padelfederacion.es/Acceso-Examenes">Exámenes</a>
+            <a href="https://www.padelfederacion.es/Acceso-VideosFormacion">Vídeos de formación</a>
+            <a href="https://www.padelfederacion.es/Solicitud_Practicas">Solicitud de prácticas</a></div>
+          <a class="mfeat alt" href="https://www.padelfederacion.es/Formacion_Calendario"><small>Entrenadores y árbitros</small><b>Fórmate con la FEP</b><span>Consulta los próximos cursos</span></a>
+        </div></div></li>
+      <li><button class="mtop" aria-expanded="false" aria-controls="m-act">Actualidad<svg class="i caret" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="mega" id="m-act"><div class="wrap mega-in has-feat" style="--cols:2">
+          <div class="mcol"><h5>Noticias</h5>
+            <a href="https://www.padelfederacion.es/Noticias">Todas las noticias</a>
+            <a href="https://www.padelfederacion.es/Post_Mujer_y_Padel">Mujer y pádel</a>
+            <a href="#">Sala de prensa</a></div>
+          <div class="mcol"><h5>Multimedia</h5>
+            <a href="https://www.padelfederacion.es/Archivos_Multimedia">Fotos y vídeos</a>
+            <a href="https://www.padelfederacion.es/mUJERyDeporte">Mujer y deporte</a></div>
+          <a class="mfeat" href="https://www.padelfederacion.es/noticia.asp?Idnoticia=2971"><small>Última hora</small><b>888 deportistas en el Cto. Infantil y Junior</b><span>Leer la noticia</span></a>
+        </div></div></li>
+      <li><button class="mtop" aria-expanded="false" aria-controls="m-fed">Federación<svg class="i caret" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="mega" id="m-fed"><div class="wrap mega-in">
+          <div class="mcol"><h5>La FEP</h5>
+            <a href="https://www.padelfederacion.es/Organos_De_Gobierno">Órganos de gobierno</a>
+            <a href="https://www.padelfederacion.es/Equipo_FEP">Equipo FEP</a>
+            <a href="https://www.padelfederacion.es/Federaciones">Federaciones autonómicas</a>
+            <a href="https://www.padelfederacion.es/Contacto">Contacto</a></div>
+          <div class="mcol"><h5>Transparencia</h5>
+            <a href="https://www.padelfederacion.es/Ley_De_Transparencia">Portal de transparencia</a>
+            <a href="https://www.padelfederacion.es/Memorias_Deportivas">Memorias deportivas</a>
+            <a href="https://www.padelfederacion.es/Circulares">Circulares</a></div>
+          <div class="mcol"><h5>Normativa</h5>
+            <a href="https://www.padelfederacion.es/Estatutos">Estatutos</a>
+            <a href="https://www.padelfederacion.es/Reglamentos">Reglamentos y normativas</a></div>
+          <div class="mcol"><h5>Integridad</h5>
+            <a href="https://www.padelfederacion.es/Dopaje">Antidopaje</a>
+            <a href="#">Canal de denuncias</a></div>
+        </div></div></li>
+    </ul>
+    <div class="tools">
+      <button class="ico" aria-label="Buscar"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
+      <a class="ico user" href="https://www.padelfederacion.es/Consulta_Tu_Licencia" aria-label="Mi área"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></a>
+      <a class="btn btn-red btn-sm" href="https://www.padelfederacion.es/Consulta_Tu_Licencia">Mi licencia</a>
+      <button class="ico burger" id="burger" aria-label="Abrir menú" aria-expanded="false" aria-controls="drawer"><svg class="i" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<!-- Menú móvil (se genera desde el menú principal) -->
+<div class="drawer" id="drawer" aria-hidden="true">
+  <div class="scrim" data-close></div>
+  <nav class="sheet" aria-label="Menú principal">
+    <div class="head"><img src="img/logo-fep-negativo.svg" alt="Federación Española de Pádel" width="394" height="184"><button class="ico" data-close aria-label="Cerrar menú"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+    <a class="btn btn-red" style="width:100%;margin-bottom:6px" href="https://www.padelfederacion.es/Consulta_Tu_Licencia">Mi licencia</a>
+    <div id="drawer-menu"></div>
+    <div class="quick"><a href="https://www.padelfederacion.es/Contacto">Contacto</a><a href="#">FIP</a><a href="https://www.padelfederacion.es/Federaciones">Federaciones autonómicas</a></div>
+  </nav>
+</div>
+
+<!-- Barra del próximo evento -->
+<section class="eventbar" aria-label="Próximo evento">
+  <div class="wrap">
+    <a class="ev-name" href="http://circuitomenores.padelfederacion.es/Campeonato?IdTorneo=31292"><small>20–22 nov · Badajoz</small><b>Master Final Menores Babolat <svg class="i" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="m9 18 6-6-6-6"/></svg></b></a>
+    <div class="cd" aria-label="Cuenta atrás"><span>Empieza en</span><div><b id="cdD">0</b><small>Días</small></div><div><b id="cdH">00</b><small>Horas</small></div><div><b id="cdM">00</b><small>Min</small></div><div><b id="cdS">00</b><small>Seg</small></div></div>
+  </div>
+</section>
+
+<main>
+<!-- Hero -->
+<section class="hero" aria-roledescription="carrusel" aria-label="Destacados">
+  <div class="slide on"><img src="https://www.padelfederacion.es/refs/Noticias/1208982169.jpg" alt=""></div>
+  <div class="slide"><img src="https://www.padelfederacion.es/refs/Noticias/8058683097.jpg" alt=""></div>
+  <div class="slide"><img src="https://www.padelfederacion.es/refs/Noticias/8784742057.jpg" alt=""></div>
+  <div class="slide"><img src="https://www.padelfederacion.es/refs/Noticias/7801740348.jpg" alt=""></div>
+  <div class="hero-c">
+    <div class="wrap">
+      <div class="kicker" id="hK">FIP World Cup · Qatar 2026</div>
+      <h1 id="hT"><span class="l1">Histórico doblete</span><span class="l2">Campeones</span><span class="l3">del mundo</span></h1>
+      <p id="hP">Las selecciones masculina y femenina conquistan el Mundial de Qatar. España vuelve a lo más alto del pádel mundial.</p>
+      <div class="cta-row"><a class="btn btn-gold" id="hL" href="https://www.padelfederacion.es/noticia.asp?Idnoticia=2976">Leer la crónica</a><a class="btn btn-line" href="https://www.padelfederacion.es/Archivos_Multimedia">Ver galería</a></div>
+    </div>
+  </div>
+  <div class="dots"><div class="wrap" role="tablist" aria-label="Elegir destacado">
+    <button role="tab" aria-selected="true" aria-label="Destacado 1"></button><button role="tab" aria-selected="false" aria-label="Destacado 2"></button><button role="tab" aria-selected="false" aria-label="Destacado 3"></button><button role="tab" aria-selected="false" aria-label="Destacado 4"></button>
+  </div></div>
+</section>
+
+<!-- Tarjetas superpuestas -->
+<div class="over">
+  <div class="wrap">
+    <a class="oc" href="https://www.padelfederacion.es/noticia.asp?Idnoticia=2987"><img src="https://www.padelfederacion.es/refs/Noticias/5293973624.jpg" alt="" loading="lazy"><span class="chip">Noticia</span><h3><small>Menores</small>Las promesas del pádel español disputan el Máster Final de Menores Babolat</h3></a>
+    <a class="oc" href="https://www.padelfederacion.es/noticia.asp?Idnoticia=2986"><img src="https://www.padelfederacion.es/refs/Noticias/8058683097.jpg" alt="" loading="lazy"><span class="chip">Destacado</span><h3><small>Selección</small>Javier Rodríguez Piris presenta al presidente del COE las dos Copas del Mundo</h3></a>
+    <a class="oc" href="https://www.padelfederacion.es/noticia.asp?Idnoticia=2980"><img src="https://www.padelfederacion.es/refs/Noticias/5083860099.jpg" alt="" loading="lazy"><span class="chip">Vídeo</span><span class="play"><svg viewBox="0 0 24 24"><path d="M7 4v16l13-8z"/></svg></span><h3><small>FIP World Cup</small>La FEP rompe registros: 45 millones de visualizaciones</h3></a>
+  </div>
+</div>
+
+<!-- Zona federado -->
+<section class="sec topo" aria-labelledby="h-zona">
+  <div class="wrap">
+    <div class="sh"><h2 class="tt" id="h-zona"><span>Zona</span><b>Federado</b></h2></div>
+    <div class="zone">
+      <div class="zp">
+        <h3>Tu licencia</h3>
+        <p>Consulta, renueva o modifica tu licencia federativa y descarga tus certificados.</p>
+        <form class="field" onsubmit="event.preventDefault()"><label class="sr" for="lic">Número de licencia o DNI</label><input id="lic" placeholder="Nº de licencia o DNI"><button class="btn btn-gold btn-sm" type="submit">Consultar</button></form>
+        <div class="quick-l">
+          <a href="https://www.padelfederacion.es/Consulta_Tu_Licencia">Alta y renovación <svg class="i" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="m9 18 6-6-6-6"/></svg></a>
+          <a href="https://www.padelfederacion.es/Licencias_Buscar">Buscar licencia <svg class="i" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="m9 18 6-6-6-6"/></svg></a>
+          <a href="https://www.padelfederacion.es/Certificados">Certificados <svg class="i" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="m9 18 6-6-6-6"/></svg></a>
+          <a href="https://www.padelfederacion.es/Clubes">Clubes <svg class="i" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="m9 18 6-6-6-6"/></svg></a>
+        </div>
+      </div>
+      <div class="zp">
+        <h3>Este fin de semana</h3>
+        <p>Pruebas oficiales del 20 al 22 de noviembre.</p>
+        <div class="match">
+          <a class="mrow" href="http://circuitomenores.padelfederacion.es/Campeonato?IdTorneo=31292"><div class="dt"><b>20</b><small>Nov</small></div><h4>Master Final Menores Babolat<small>C.D. PadelMérida · Badajoz</small></h4><span class="tag c-men">Menores</span></a>
+          <a class="mrow" href="https://www.padelfederacion.es/Camp_Equipos.asp?IdTorneo=30153"><div class="dt"><b>20</b><small>Nov</small></div><h4>Cto. España Equipos 3ª Vet.<small>Padel Barcelona El Prat</small></h4><span class="tag c-vet">Veteranos</span></a>
+          <a class="mrow" href="https://www.padelfederacion.es/Camp_Equipos.asp?IdTorneo=28677"><div class="dt"><b>20</b><small>Nov</small></div><h4>Copa España Ligas Plata · HEAD<small>Club Somontes · Madrid</small></h4><span class="tag c-abs">Absoluto</span></a>
+        </div>
+        <div class="foot"><a class="btn btn-line btn-sm" href="https://www.padelfederacion.es/CalendarioFEP">Calendario completo</a></div>
+      </div>
+      <div class="zp">
+        <h3>Rankings</h3>
+        <p>Clasificaciones oficiales de la FEP.</p>
+        <div class="seg" role="tablist" aria-label="Elegir ranking"><button role="tab" aria-selected="true">Absoluto</button><button role="tab" aria-selected="false">Menores</button><button role="tab" aria-selected="false">Veteranos</button></div>
+        <ul class="rk">
+          <li><a href="https://www.padelfederacion.es/Rankings"><span class="n">♂</span>Ranking masculino<small>Ver</small></a></li>
+          <li><a href="https://www.padelfederacion.es/Rankings"><span class="n">♀</span>Ranking femenino<small>Ver</small></a></li>
+          <li><a href="https://www.padelfederacion.es/Estadisticas"><span class="n">%</span>Estadísticas<small>Ver</small></a></li>
+        </ul>
+        <div class="foot"><form class="field" onsubmit="event.preventDefault()"><label class="sr" for="rks">Buscar jugador en el ranking</label><input id="rks" placeholder="Buscar jugador/a"><button class="ico" aria-label="Buscar" type="submit"><svg class="i" viewBox="0 0 24 24" style="width:18px;height:18px"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button></form></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Momentos del Mundial -->
+<section class="sec" style="padding-top:0" aria-labelledby="h-mom">
+  <div class="wrap">
+    <div class="sh"><h2 class="tt" id="h-mom"><span>El camino al título</span><b>Qatar 2026</b></h2></div>
+    <div class="moments" id="moments">
+      <a class="mo" href="https://www.padelfederacion.es/noticia.asp?Idnoticia=2976"><img src="https://www.padelfederacion.es/refs/Noticias/1208982169.jpg" alt="" loading="lazy"><span class="num">01</span><span class="chip">Final</span><h3>Histórico doblete en Qatar</h3></a>
+      <a class="mo" href="https://www.padelfederacion.es/noticia.asp?Idnoticia=2975"><img src="https://www.padelfederacion.es/refs/Noticias/1265699088.jpg" alt="" loading="lazy"><span class="num">02</span><span class="chip">Semifinal</span><h3>¡Estamos en la final del FIP World Cup!</h3></a>
+      <a class="mo" href="https://www.padelfederacion.es/noticia.asp?Idnoticia=2974"><img src="https://www.padelfederacion.es/refs/Noticias/8553205192.jpg" alt="" loading="lazy"><span class="num">03</span><span class="chip">Cuartos</span><h3>¡España saluda a las semis!</h3></a>
+      <a class="mo" href="https://www.padelfederacion.es/noticia.asp?Idnoticia=2973"><img src="https://www.padelfederacion.es/refs/Noticias/8612394034.jpg" alt="" loading="lazy"><span class="num">04</span><span class="chip">Grupos</span><h3>Doble pleno ante Brasil y Emiratos Árabes</h3></a>
+      <a class="mo" href="https://www.padelfederacion.es/noticia.asp?Idnoticia=2972"><img src="https://www.padelfederacion.es/refs/Noticias/7813413321.jpg" alt="" loading="lazy"><span class="num">05</span><span class="chip">Grupos</span><h3>España impone su ley ante Gran Bretaña y Paraguay</h3></a>
+      <a class="mo" href="https://www.padelfederacion.es/noticia.asp?Idnoticia=2970"><img src="https://www.padelfederacion.es/refs/Noticias/5490079581.jpg" alt="" loading="lazy"><span class="num">06</span><span class="chip">Debut</span><h3>Arranca el sueño mundialista con doble triunfo</h3></a>
+    </div>
+    <div class="car-ctrl"><button aria-label="Anteriores" data-scroll="moments" data-dir="-1"><svg class="i" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button><div class="bar-p" aria-hidden="true"><i id="momBar"></i></div><button aria-label="Siguientes" data-scroll="moments" data-dir="1"><svg class="i" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button></div>
+  </div>
+</section>
+
+<!-- Tu federación -->
+<section class="wrap" aria-label="Tu federación autonómica" style="margin-bottom:84px">
+  <div class="foryou">
+    <span class="plus"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>
+    <div><h3>Tu federación</h3><p>Elige tu comunidad y te mostramos sus torneos, noticias y contacto.</p></div>
+    <label class="sr" for="ffaa">Federación autonómica</label>
+    <select id="ffaa"><option>Elige tu comunidad</option><option>Andalucía</option><option>Aragón</option><option>Asturias</option><option>Illes Balears</option><option>Canarias</option><option>Cantabria</option><option>Castilla-La Mancha</option><option>Castilla y León</option><option>Cataluña</option><option>Ceuta</option><option>Extremadura</option><option>Galicia</option><option>Comunidad de Madrid</option><option>Melilla</option><option>Región de Murcia</option><option>Navarra</option><option>País Vasco</option><option>La Rioja</option><option>Comunitat Valenciana</option></select>
+  </div>
+</section>
+
+<!-- Próximos torneos + formación + categorías (panel blanco) -->
+<div class="wrap on-light">
+  <section class="panel top pad" aria-labelledby="h-tor">
+    <div class="sh"><h2 class="tt" id="h-tor"><span>Próximos</span><b>Torneos</b></h2><a class="btn btn-line btn-sm" href="https://www.padelfederacion.es/CalendarioFEP">Ver todo</a></div>
+    <div class="posters">
+      <a class="po c-men" href="http://circuitomenores.padelfederacion.es/Campeonato?IdTorneo=31292"><img src="https://www.padelfederacion.es/refs/Noticias/7801740348.jpg" alt="" loading="lazy"><div class="top"><span class="tag">Menores</span><span>Badajoz</span></div><div class="when">20–22 noviembre</div><h3>Master Final Menores Babolat</h3><div class="where">C.D. PadelMérida</div><div class="acts"><span class="hl">Cuadros</span><span>Horarios</span></div></a>
+      <a class="po c-vet" href="https://www.padelfederacion.es/Camp_Equipos.asp?IdTorneo=30153"><img src="https://www.padelfederacion.es/refs/Noticias/8784742057.jpg" alt="" loading="lazy"><div class="top"><span class="tag">Veteranos</span><span>Barcelona</span></div><div class="when">20–22 noviembre</div><h3>Cto. España Equipos 3ª Vet. +40 / +35</h3><div class="where">Padel Barcelona El Prat</div><div class="acts"><span class="hl">Cuadros</span><span>Horarios</span></div></a>
+      <a class="po c-abs" href="https://www.padelfederacion.es/Camp_Equipos.asp?IdTorneo=28677"><img src="https://www.padelfederacion.es/refs/Multimedia/2026/CCA-Absoluta-80.jpg" alt="" loading="lazy"><div class="top"><span class="tag">Absoluto</span><span>Madrid</span></div><div class="when">20–22 noviembre</div><h3>Copa de España Ligas Plata · HEAD</h3><div class="where">Club Deportivo Somontes</div><div class="acts"><span class="hl">Cuadros</span><span>Horarios</span></div></a>
+      <a class="po c-vet" href="https://www.padelfederacion.es/Camp_Equipos.asp?IdTorneo=28854"><img src="https://www.padelfederacion.es/refs/Multimedia/2026/CCA-Absoluta-79.jpg" alt="" loading="lazy"><div class="top"><span class="tag">Veteranos</span><span>Zaragoza</span></div><div class="when">27–29 noviembre</div><h3>Copa Ligas Autonómicas de Veteranos</h3><div class="where">Regal Padel Club</div><div class="acts"><span class="hl">Inscripción</span><span>Info</span></div></a>
+      <a class="po c-sil" href="https://www.padelfederacion.es/Camp_Silla.asp?IdTorneo=31277"><img src="https://www.padelfederacion.es/refs/Multimedia/2026/CCA-Absoluta-81.jpg" alt="" loading="lazy"><div class="top"><span class="tag">Pádel en silla</span><span>Bizkaia</span></div><div class="when">27–29 noviembre</div><h3>X Open Nacional Fekoor Bizkaia</h3><div class="where">Padel Bizkaia Zamudio</div><div class="acts"><span class="hl">Inscripción</span><span>Info</span></div></a>
+      <a class="po c-sil" href="https://www.padelfederacion.es/CalendarioFEP"><img src="https://www.padelfederacion.es/refs/Noticias/8553205192.jpg" alt="" loading="lazy"><div class="top"><span class="tag">Pádel en silla</span><span>Madrid</span></div><div class="when">11–13 diciembre</div><h3>Cto. España Absoluto por Parejas</h3><div class="where">Club G24 · Arroyomolinos</div><div class="acts"><span class="hl">Inscripción</span><span>Info</span></div></a>
+    </div>
+  </section>
+
+  <section class="pad-x" style="background:#fff" aria-labelledby="h-form">
+    <div class="promo">
+      <div class="txt">
+        <small>Formación FEP</small>
+        <h2 id="h-form">Fórmate.<br>Entrena. Arbitra.</h2>
+        <p>Cursos oficiales de técnicos, árbitros y jueces árbitro, presenciales y online. Próximo: Juez Árbitro de Pádel en Silla, 28 de noviembre.</p>
+        <a class="btn btn-white" href="https://www.padelfederacion.es/Formacion_Calendario">Ver cursos</a>
+      </div>
+      <div class="pic"><img src="https://www.padelfederacion.es/refs/Multimedia/2026/CCA-Absoluta-81.jpg" alt="" loading="lazy"></div>
+    </div>
+  </section>
+
+  <section class="panel bottom pad" aria-labelledby="h-cat">
+    <div class="sh"><h2 class="tt" id="h-cat"><span>El pádel de</span><b>Todos</b></h2><a class="btn btn-line btn-sm" href="https://www.padelfederacion.es/Campeonatos">Competiciones</a></div>
+    <div class="cats">
+      <a class="cat" style="--c:var(--red)" href="https://www.padelfederacion.es/Campeonatos"><img src="https://www.padelfederacion.es/refs/Multimedia/2026/CCA-Absoluta-80.jpg" alt="" loading="lazy"><span class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/></svg></span><span class="nm"><small>Competición</small><b>Absoluto</b><i></i></span></a>
+      <a class="cat" style="--c:#1f5bd8" href="http://circuitomenores.padelfederacion.es/"><img src="https://www.padelfederacion.es/refs/Noticias/7801740348.jpg" alt="" loading="lazy"><span class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.4 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z"/></svg></span><span class="nm"><small>Cantera</small><b>Menores</b><i></i></span></a>
+      <a class="cat" style="--c:#ff7a1a" href="https://www.padelfederacion.es/Calendario_Veteranos_FFAA"><img src="https://www.padelfederacion.es/refs/Noticias/8784742057.jpg" alt="" loading="lazy"><span class="ic"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></span><span class="nm"><small>+35 · +40 · +50</small><b>Veteranos</b><i></i></span></a>
+      <a class="cat" style="--c:#7a3cf0" href="#"><img src="https://www.padelfederacion.es/refs/Multimedia/2026/CCA-Absoluta-81.jpg" alt="" loading="lazy"><span class="ic"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><path d="M10 9v5h5l2 5M9 12a5 5 0 1 0 6 6"/></svg></span><span class="nm"><small>Adaptado</small><b>Pádel en silla</b><i></i></span></a>
+      <a class="cat" style="--c:var(--gold)" href="https://www.padelfederacion.es/Post_Mujer_y_Padel"><img src="https://www.padelfederacion.es/refs/Multimedia/2026/CCA-Absoluta-79.jpg" alt="" loading="lazy"><span class="ic"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="9" r="5"/><path d="M12 14v7M9 18h6"/></svg></span><span class="nm"><small>Igualdad</small><b>Mujer y pádel</b><i></i></span></a>
+    </div>
+  </section>
+</div>
+
+<!-- Más noticias -->
+<section class="sec topo" aria-labelledby="h-news">
+  <div class="wrap newsrow">
+    <div class="intro">
+      <div><h2 class="tt" id="h-news"><span>Lo último</span><b>Noticias</b></h2><p>Toda la actualidad de la selección, las competiciones y la Federación.</p></div>
+      <a class="btn btn-line btn-sm" href="https://www.padelfederacion.es/Noticias">Ver todo</a>
+    </div>
+    <div>
+      <div class="ncards" id="ncards">
+        <a class="nc" href="https://www.padelfederacion.es/noticia.asp?Idnoticia=2984"><div class="ph"><img src="https://www.padelfederacion.es/refs/Noticias/8784742057.jpg" alt="" loading="lazy"></div><div class="meta"><span>Absoluto</span><span class="d">Copa HEAD</span></div><h3>El Prat corona a los campeones de la Copa de España de Ligas Autonómicas HEAD</h3></a>
+        <a class="nc" href="https://www.padelfederacion.es/noticia.asp?Idnoticia=2983"><div class="ph"><img src="https://www.padelfederacion.es/refs/Noticias/2042157828.jpg" alt="" loading="lazy"></div><div class="meta"><span>Absoluto</span><span class="d">Barcelona</span></div><h3>Barcelona reúne a los mejores equipos de las ligas autonómicas en la VI Copa de España HEAD</h3></a>
+        <a class="nc" href="https://www.padelfederacion.es/noticia.asp?Idnoticia=2977"><div class="ph"><img src="https://www.padelfederacion.es/refs/Noticias/7801740348.jpg" alt="" loading="lazy"></div><div class="meta"><span>Menores</span><span class="d">Aragón</span></div><h3>El futuro del pádel español brilla en Aragón tras un Campeonato Infantil y Junior de récord</h3></a>
+        <a class="nc" href="https://www.padelfederacion.es/noticia.asp?Idnoticia=2980"><div class="ph"><img src="https://www.padelfederacion.es/refs/Noticias/5083860099.jpg" alt="" loading="lazy"></div><div class="meta"><span>FEP</span><span class="d">Audiencias</span></div><h3>La FEP rompe todos los registros: 45 millones de visualizaciones durante el FIP World Cup 2026</h3></a>
+        <a class="nc" href="https://www.padelfederacion.es/noticia.asp?Idnoticia=2986"><div class="ph"><img src="https://www.padelfederacion.es/refs/Noticias/8058683097.jpg" alt="" loading="lazy"></div><div class="meta"><span>Selección</span><span class="d">COE</span></div><h3>Javier Rodríguez Piris presenta al presidente del COE las dos Copas del Mundo</h3></a>
+      </div>
+      <div class="car-ctrl" style="justify-content:flex-start"><button aria-label="Anteriores" data-scroll="ncards" data-dir="-1"><svg class="i" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button><button aria-label="Siguientes" data-scroll="ncards" data-dir="1"><svg class="i" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button></div>
+    </div>
+  </div>
+</section>
+
+<!-- Licencia -->
+<div class="wrap on-light">
+  <section class="panel lic" aria-labelledby="h-lic">
+    <div>
+      <h2 class="tt" id="h-lic"><span>Licencia federativa</span><b>Juega oficial</b></h2>
+      <ul>
+        <li>Compite en torneos y campeonatos oficiales</li>
+        <li>Suma puntos en los rankings de la FEP</li>
+        <li>Seguro deportivo incluido</li>
+        <li>Acceso a la formación oficial de técnicos y árbitros</li>
+      </ul>
+      <div class="btns"><a class="btn btn-red" href="https://www.padelfederacion.es/Consulta_Tu_Licencia">Tramitar licencia</a><a class="btn btn-line" href="https://www.padelfederacion.es/Federaciones">Tu federación</a></div>
+    </div>
+    <div style="position:relative;display:grid;place-items:center;isolation:isolate;padding:30px 0">
+      <div class="card back" aria-hidden="true"></div>
+      <div class="card" aria-hidden="true">
+        <div class="row" style="align-items:flex-start"><img src="img/logo-fep-negativo.svg" alt=""><span class="chipc"></span></div>
+        <div class="row"><div><small>Titular</small><b>Tu nombre</b></div><div style="text-align:right"><small>Temporada</small><b>2027</b></div></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Patrocinadores -->
+<div class="wrap on-light" style="margin-top:20px">
+  <section class="panel partners" aria-labelledby="h-par">
+    <h2 class="tt" id="h-par"><span>Nuestros</span><b>Patrocinadores</b></h2>
+    <p class="lbl">Patrocinadores principales</p>
+    <div class="plogos main">
+      <a href="#"><img src="https://www.padelfederacion.es/refs/images/banners/iberdrola.jpg" alt="Iberdrola" loading="lazy"></a>
+      <a href="#"><img src="https://www.padelfederacion.es/refs/images/banners/cupra.jpg" alt="Cupra" loading="lazy"></a>
+      <a href="#"><img src="https://www.padelfederacion.es/refs/images/banners/head2.jpg" alt="Head" loading="lazy"></a>
+    </div>
+    <p class="lbl">Colaboradores</p>
+    <div class="plogos">
+      <a href="#"><img src="https://www.padelfederacion.es/refs/images/banners/Bullpadel.jpg" alt="Bullpadel" loading="lazy"></a>
+      <a href="#"><img src="https://www.padelfederacion.es/refs/images/banners/Joma.jpg" alt="Joma" loading="lazy"></a>
+      <a href="#"><img src="https://www.padelfederacion.es/refs/images/banners/siux.jpg" alt="Siux" loading="lazy"></a>
+      <a href="#"><img src="https://www.padelfederacion.es/refs/images/banners/PadelProShop.jpg" alt="Padel Pro Shop" loading="lazy"></a>
+      <a href="#"><img src="https://www.padelfederacion.es/refs/images/banners/CSDbANNERv2.jpg" alt="Consejo Superior de Deportes" loading="lazy"></a>
+    </div>
+  </section>
+</div>
+</main>
+
+<footer class="topo">
+  <div class="wrap">
+    <div class="nl">
+      <div><h3>No te pierdas nada</h3><p>Convocatorias, apertura de inscripciones y la actualidad de la FEP en tu correo.</p></div>
+      <form onsubmit="event.preventDefault()"><label class="sr" for="em">Correo electrónico</label><input id="em" type="email" placeholder="Tu correo electrónico"><button class="btn btn-red" type="submit">Suscribirme</button></form>
+    </div>
+    <div class="fcols">
+      <div>
+        <a class="brand" href="#"><img src="img/logo-fep-negativo.svg" alt="Federación Española de Pádel" width="394" height="184" loading="lazy"></a>
+        <p>Federación Española de Pádel · +34 91 510 34 00</p>
+        <div class="soc">
+          <a href="#" aria-label="X"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.8 3h3.1l-6.8 7.7L22 21h-6.2l-4.9-6.4L5.3 21H2.2l7.2-8.3L1.8 3h6.4l4.4 5.8zm-1.1 16.2h1.7L7.4 4.7H5.6z"/></svg></a>
+          <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/></svg></a>
+          <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12 31 31 0 0 0 1 16.8a3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8zM9.7 15.1V8.9l5.8 3.1z"/></svg></a>
+          <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.5h4V21H3zM9.5 9.5h3.8v1.6h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.6 4.8 6V21h-4v-5.1c0-1.2 0-2.8-1.7-2.8s-2 1.3-2 2.7V21h-4z"/></svg></a>
+        </div>
+      </div>
+      <div><h4>Competición</h4><ul><li><a href="https://www.padelfederacion.es/CalendarioFEP">Calendario</a></li><li><a href="https://www.padelfederacion.es/Campeonatos">Campeonatos de España</a></li><li><a href="https://www.padelfederacion.es/Rankings">Rankings</a></li><li><a href="https://www.padelfederacion.es/Retransmisiones">Retransmisiones</a></li></ul></div>
+      <div><h4>Federados</h4><ul><li><a href="https://www.padelfederacion.es/Consulta_Tu_Licencia">Tu licencia</a></li><li><a href="https://www.padelfederacion.es/Licencias_Buscar">Buscar licencia</a></li><li><a href="https://www.padelfederacion.es/Certificados">Certificados</a></li><li><a href="https://www.padelfederacion.es/Formacion_Calendario">Formación</a></li></ul></div>
+      <div><h4>Federación</h4><ul><li><a href="https://www.padelfederacion.es/Organos_De_Gobierno">Órganos de gobierno</a></li><li><a href="https://www.padelfederacion.es/Ley_De_Transparencia">Portal de transparencia</a></li><li><a href="https://www.padelfederacion.es/Federaciones">Federaciones autonómicas</a></li><li><a href="https://www.padelfederacion.es/Reglamentos">Normativa</a></li></ul></div>
+      <div><h4>Ayuda</h4><ul><li><a href="https://www.padelfederacion.es/Contacto">Contacto</a></li><li><a href="#">Canal de denuncias</a></li><li><a href="https://www.padelfederacion.es/Dopaje">Antidopaje</a></li><li><a href="#">Sala de prensa</a></li></ul></div>
+    </div>
+  </div>
+  <div class="legal"><div class="wrap"><span>© 2026 Federación Española de Pádel</span><nav aria-label="Legal"><a href="#">Aviso legal</a><a href="#">Privacidad</a><a href="#">Cookies</a><a href="#">Accesibilidad</a></nav></div></div>
+</footer>
+
+<script>
+// Hero
+const slides=[...document.querySelectorAll('.hero .slide')],dots=[...document.querySelectorAll('.dots button')];
+const H=[
+ {k:'FIP World Cup · Qatar 2026',t:['Histórico doblete','Campeones','del mundo'],p:'Las selecciones masculina y femenina conquistan el Mundial de Qatar. España vuelve a lo más alto del pádel mundial.',h:'https://www.padelfederacion.es/noticia.asp?Idnoticia=2976',b:'Leer la crónica'},
+ {k:'Selección española',t:['Dos Copas','del Mundo','en casa'],p:'Javier Rodríguez Piris presenta al presidente del COE los dos trofeos conquistados en Qatar.',h:'https://www.padelfederacion.es/noticia.asp?Idnoticia=2986',b:'Leer la noticia'},
+ {k:'VI Copa de España Ligas Autonómicas · HEAD',t:['El Prat','corona','a sus campeones'],p:'Los mejores equipos de las ligas autonómicas se dieron cita en Barcelona.',h:'https://www.padelfederacion.es/noticia.asp?Idnoticia=2984',b:'Ver resultados'},
+ {k:'Circuito de Menores',t:['Máster Final','Babolat','Badajoz 2026'],p:'Las promesas del pádel español se citan en Mérida del 20 al 22 de noviembre.',h:'https://www.padelfederacion.es/noticia.asp?Idnoticia=2987',b:'Ver cuadros'}];
+let cur=0,timer;
+function show(i){cur=i;slides.forEach((s,k)=>s.classList.toggle('on',k===i));dots.forEach((d,k)=>d.setAttribute('aria-selected',k===i));
+ const d=H[i];hK.textContent=d.k;hT.innerHTML='<span class="l1">'+d.t[0]+'</span><span class="l2">'+d.t[1]+'</span><span class="l3">'+d.t[2]+'</span>';hP.textContent=d.p;hL.href=d.h;hL.textContent=d.b;
+ clearTimeout(timer);if(!matchMedia('(prefers-reduced-motion: reduce)').matches)timer=setTimeout(()=>show((cur+1)%slides.length),7000)}
+dots.forEach((d,i)=>d.addEventListener('click',()=>show(i)));show(0);
+
+// Cuenta atrás
+const target=new Date('2026-11-20T09:00:00+01:00'),pad=n=>String(n).padStart(2,'0');
+function tick(){let s=Math.max(0,Math.floor((target-new Date())/1000));cdD.textContent=Math.floor(s/86400);s%=86400;cdH.textContent=pad(Math.floor(s/3600));s%=3600;cdM.textContent=pad(Math.floor(s/60));cdS.textContent=pad(s%60)}
+tick();setInterval(tick,1000);
+
+// Carruseles
+document.querySelectorAll('[data-scroll]').forEach(b=>b.addEventListener('click',()=>{const el=document.getElementById(b.dataset.scroll);el.scrollBy({left:b.dataset.dir*el.clientWidth*.8,behavior:'smooth'})}));
+const mom=document.getElementById('moments');
+mom.addEventListener('scroll',()=>{const p=mom.scrollLeft/Math.max(1,mom.scrollWidth-mom.clientWidth);const w=mom.clientWidth/mom.scrollWidth;momBar.style.width=(w*100)+'%';momBar.style.transform='translateX('+(p*(1/w-1)*100)+'%)'},{passive:true});
+mom.dispatchEvent(new Event('scroll'));
+
+// Selector de ranking (demo)
+document.querySelectorAll('.seg button').forEach(b=>b.addEventListener('click',()=>document.querySelectorAll('.seg button').forEach(x=>x.setAttribute('aria-selected',x===b))));
+
+// Megamenú
+const tops=[...document.querySelectorAll('.mtop')];let hoverT;
+const closeMega=ex=>tops.forEach(b=>{if(b!==ex){b.setAttribute('aria-expanded','false');document.getElementById(b.getAttribute('aria-controls')).classList.remove('open')}});
+const openMega=b=>{closeMega(b);b.setAttribute('aria-expanded','true');document.getElementById(b.getAttribute('aria-controls')).classList.add('open')};
+tops.forEach(b=>{
+ b.addEventListener('click',()=>b.getAttribute('aria-expanded')==='true'?closeMega():openMega(b));
+ const li=b.parentElement;
+ li.addEventListener('pointerenter',e=>{if(e.pointerType!=='mouse')return;clearTimeout(hoverT);hoverT=setTimeout(()=>openMega(b),tops.some(t=>t.getAttribute('aria-expanded')==='true')?0:120)});
+ li.addEventListener('pointerleave',e=>{if(e.pointerType!=='mouse')return;clearTimeout(hoverT);hoverT=setTimeout(()=>closeMega(),200)});
+});
+document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;const o=tops.find(t=>t.getAttribute('aria-expanded')==='true');if(o){closeMega();o.focus()}else setD(false)});
+document.addEventListener('click',e=>{if(!e.target.closest('#menu'))closeMega()});
+document.getElementById('menu').addEventListener('focusout',e=>{if(!e.relatedTarget||!e.relatedTarget.closest('#menu'))closeMega()});
+
+// Menú móvil generado desde el megamenú
+document.getElementById('drawer-menu').innerHTML=tops.map(b=>{const m=document.getElementById(b.getAttribute('aria-controls'));
+ const cols=[...m.querySelectorAll('.mcol')].map(c=>'<h6>'+c.querySelector('h5').textContent+'</h6>'+[...c.querySelectorAll('a')].map(a=>'<a href="'+a.getAttribute('href')+'">'+a.childNodes[0].textContent.trim()+'</a>').join('')).join('');
+ return '<details><summary>'+b.textContent.trim()+'</summary><div>'+cols+'</div></details>'}).join('');
+const drawer=document.getElementById('drawer'),burger=document.getElementById('burger');
+function setD(o){drawer.classList.toggle('open',o);drawer.setAttribute('aria-hidden',!o);burger.setAttribute('aria-expanded',o);document.body.style.overflow=o?'hidden':''}
+burger.addEventListener('click',()=>setD(true));drawer.querySelectorAll('[data-close], .sheet a').forEach(e=>e.addEventListener('click',()=>setD(false)));
+</script>
+</body>
+</html>
